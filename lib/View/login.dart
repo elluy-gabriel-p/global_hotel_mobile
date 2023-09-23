@@ -49,7 +49,8 @@ class _LoginViewState extends State<LoginView> {
                     Container(
                       padding: EdgeInsets.all(16.0),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color:
+                            themeNotifier.isDark ? Colors.black : Colors.white,
                         borderRadius: BorderRadius.circular(10.0),
                         boxShadow: [
                           BoxShadow(

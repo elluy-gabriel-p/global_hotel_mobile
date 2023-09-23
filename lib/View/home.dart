@@ -19,13 +19,9 @@ class _HomeViewState extends State<HomeView> {
 
   static const List<Widget> _widgedOptions = <Widget>[
     //*index 0
-    Center(child: Image(image: NetworkImage('https://picsum.photos/200/300'))),
-    /*ini bawaan gd yak yg dpt bagian home ganti ae*/
-
-    //*index 1
     ListAnggotaView(),
 
-    //*index 2
+    //*index 1
     ListGrid(),
   ];
 
@@ -34,11 +30,6 @@ class _HomeViewState extends State<HomeView> {
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
         items: const [
-          BottomNavigationBarItem(
-              icon: Icon(
-                Icons.home,
-              ),
-              label: 'Home'),
           BottomNavigationBarItem(
               icon: Icon(
                 Icons.list,
