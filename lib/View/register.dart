@@ -93,8 +93,7 @@ class _RegisterViewState extends State<RegisterView> {
                     Container(
                       padding: EdgeInsets.all(16.0),
                       decoration: BoxDecoration(
-                        color:
-                            themeNotifier.isDark ? Colors.black : Colors.white,
+                        color: themeNotifier.isDark ? Colors.black : Colors.white,
                         borderRadius: BorderRadius.circular(10.0),
                         boxShadow: [
                           BoxShadow(
