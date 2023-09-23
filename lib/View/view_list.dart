@@ -23,9 +23,8 @@ class _ListViewState extends State<ListAnggotaView> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Color.fromARGB(255, 51, 48, 48),
-          title: Text(
-            'List Anggota Kelompok',
-            style: TextStyle(color: Colors.white)),
+          title: Text('List Anggota Kelompok',
+              style: TextStyle(color: Colors.white)),
           bottom: TabBar(
             tabs: myTabs,
           ),
@@ -35,13 +34,13 @@ class _ListViewState extends State<ListAnggotaView> {
             // Content for Tab 1
             Center(
               child: Column(
-                mainAxisSize: MainAxisSize.min, 
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
                     padding: EdgeInsets.all(16.0),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10.0),
-                      color: Colors.white, 
+                      color: Colors.white,
                       boxShadow: [
                         BoxShadow(
                           color: Colors.grey.withOpacity(1.0),
@@ -61,7 +60,7 @@ class _ListViewState extends State<ListAnggotaView> {
                             width: 200,
                             height: 200,
                           ),
-                        ), 
+                        ),
                         SizedBox(height: 20),
                         Text('Nama : Tiffany'),
                         Text('Umur : 20'),
@@ -78,13 +77,13 @@ class _ListViewState extends State<ListAnggotaView> {
             // Content for Tab 2
             Center(
               child: Column(
-                mainAxisSize: MainAxisSize.min, 
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
                     padding: EdgeInsets.all(16.0),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10.0),
-                      color: Colors.white, 
+                      color: Colors.white,
                       boxShadow: [
                         BoxShadow(
                           color: Colors.grey.withOpacity(1.0),
@@ -104,7 +103,7 @@ class _ListViewState extends State<ListAnggotaView> {
                             width: 200,
                             height: 200,
                           ),
-                        ), 
+                        ),
                         SizedBox(height: 20),
                         Text('Nama : Iqbal'),
                         Text('Umur : 22'),
@@ -121,13 +120,13 @@ class _ListViewState extends State<ListAnggotaView> {
             // Content for Tab 3
             Center(
               child: Column(
-                mainAxisSize: MainAxisSize.min, 
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
                     padding: EdgeInsets.all(16.0),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10.0),
-                      color: Colors.white, 
+                      color: Colors.white,
                       boxShadow: [
                         BoxShadow(
                           color: Colors.grey.withOpacity(1.0),
@@ -147,7 +146,7 @@ class _ListViewState extends State<ListAnggotaView> {
                             width: 200,
                             height: 200,
                           ),
-                        ), 
+                        ),
                         SizedBox(height: 20),
                         Text('Nama : Kevin'),
                         Text('Umur : 20'),
@@ -164,13 +163,13 @@ class _ListViewState extends State<ListAnggotaView> {
             // Content for Tab 4
             Center(
               child: Column(
-                mainAxisSize: MainAxisSize.min, 
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
                     padding: EdgeInsets.all(16.0),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10.0),
-                      color: Colors.white, 
+                      color: Colors.white,
                       boxShadow: [
                         BoxShadow(
                           color: Colors.grey.withOpacity(1.0),
@@ -190,7 +189,7 @@ class _ListViewState extends State<ListAnggotaView> {
                             width: 200,
                             height: 200,
                           ),
-                        ), 
+                        ),
                         SizedBox(height: 20),
                         Text('Nama : Bona'),
                         Text('Umur : 21'),
@@ -207,13 +206,13 @@ class _ListViewState extends State<ListAnggotaView> {
             // Content for Tab 5
             Center(
               child: Column(
-                mainAxisSize: MainAxisSize.min, 
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
                     padding: EdgeInsets.all(16.0),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10.0),
-                      color: Colors.white, 
+                      color: Colors.white,
                       boxShadow: [
                         BoxShadow(
                           color: Colors.grey.withOpacity(1.0),
@@ -233,7 +232,7 @@ class _ListViewState extends State<ListAnggotaView> {
                             width: 200,
                             height: 200,
                           ),
-                        ), 
+                        ),
                         SizedBox(height: 20),
                         Text('Nama : Elluy'),
                         Text('Umur : 20'),
@@ -247,191 +246,6 @@ class _ListViewState extends State<ListAnggotaView> {
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class listGrid extends StatefulWidget {
-  const listGrid({super.key});
-
-  @override
-  State<listGrid> createState() => _listGridState();
-}
-
-class _listGridState extends State<listGrid> {
-  var size=180.0;
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Wrap(
-            children: [
-              Container(
-                child: InkResponse(
-                  onTap:(){
-                    setState(() {
-                      size == 180 ? size = size*2 : size= 180.0;
-                    });
-                  } ,
-                ),
-                margin: EdgeInsets.all(8),
-                width: size,
-                height: size,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.blue,
-                ),
-                
-              ),
-              Container(
-                child: InkResponse(
-                  onTap:(){
-                    setState(() {
-                      size == 180 ? size = size*2 : size= 180.0;
-                    });
-                  } ,
-                ),
-                margin: EdgeInsets.all(8),
-                width: 180.0,
-                height: 180.0,
-                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.blue,
-                ),
-              ),
-              Container(
-                child: InkResponse(
-                  onTap:(){
-                    setState(() {
-                      size == 180 ? size = size*2 : size= 180.0;
-                    });
-                  } ,
-                ),
-                margin: EdgeInsets.all(8),
-                width: 180.0,
-                height: 180.0,
-                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.blue,
-                ),
-              ),
-              Container(
-                child: InkResponse(
-                  onTap:(){
-                    setState(() {
-                      size == 180 ? size = size*2 : size= 180.0;
-                    });
-                  } ,
-                ),
-                margin: EdgeInsets.all(8),
-                width: 180.0,
-                height: 180.0,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.blue,
-                ),
-              ),
-              Container(
-                child: InkResponse(
-                  onTap:(){
-                    setState(() {
-                      size == 180 ? size = size*2 : size= 180.0;
-                    });
-                  } ,
-                ),
-                margin: EdgeInsets.all(8),
-                width: 180.0,
-                height: 180.0,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.blue,
-                ),
-              ),
-              Container(
-                child: InkResponse(
-                  onTap:(){
-                    setState(() {
-                      size == 180 ? size = size*2 : size= 180.0;
-                    });
-                  } ,
-                ),
-                margin: EdgeInsets.all(8),
-                width: 180.0,
-                height: 180.0,
-                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.blue,
-                ),
-              ),
-              Container(
-                child: InkResponse(
-                  onTap:(){
-                    setState(() {
-                      size == 180 ? size = size*2 : size= 180.0;
-                    });
-                  } ,
-                ),
-                margin: EdgeInsets.all(8),
-                width: 180.0,
-                height: 180.0,
-                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.blue,
-                ),
-              ),
-              Container(
-                child: InkResponse(
-                  onTap:(){
-                    setState(() {
-                      size == 180 ? size = size*2 : size= 180.0;
-                    });
-                  } ,
-                ),
-                margin: EdgeInsets.all(8),
-                width: 180.0,
-                height: 180.0,
-                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.blue,
-                ),
-              ),
-              Container(
-                child: InkResponse(
-                  onTap:(){
-                    setState(() {
-                      size == 180 ? size = size*2 : size= 180.0;
-                    });
-                  } ,
-                ),
-                margin: EdgeInsets.all(8),
-                width: 180.0,
-                height: 180.0,
-                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.blue,
-                ),
-              ),
-              Container(
-                child: InkResponse(
-                  onTap:(){
-                    setState(() {
-                      size == 180 ? size = size*2 : size= 180.0;
-                    });
-                  } ,
-                ),
-                margin: EdgeInsets.all(8),
-                width: 180.0,
-                height: 180.0,
-                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.blue,
-                ),
-              )
-            ],
-          ),
         ),
       ),
     );

@@ -1,5 +1,6 @@
- import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:ugdlayout2/View/view_list.dart';
+import 'package:ugdlayout2/View/view_grid.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -13,15 +14,19 @@ class _HomeViewState extends State<HomeView> {
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
-    }); 
+    });
   }
 
   static const List<Widget> _widgedOptions = <Widget>[
     //*index 0
-    Center(child: Image(image: NetworkImage('https://picsum.photos/200/300'))),/*ini bawaan gd yak yg dpt bagian home ganti ae*/
+    Center(child: Image(image: NetworkImage('https://picsum.photos/200/300'))),
+    /*ini bawaan gd yak yg dpt bagian home ganti ae*/
 
     //*index 1
-    ListAnggotaView()
+    ListAnggotaView(),
+
+    //*index 2
+    ListGrid(),
   ];
 
   @override
@@ -43,8 +48,7 @@ class _HomeViewState extends State<HomeView> {
               icon: Icon(
                 Icons.grid_3x3,
               ),
-              label: 'Grid'
-            ),
+              label: 'Grid'),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.black,
