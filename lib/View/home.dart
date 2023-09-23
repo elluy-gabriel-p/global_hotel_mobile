@@ -39,6 +39,12 @@ class _HomeViewState extends State<HomeView> {
                 Icons.list,
               ),
               label: 'List'),
+          BottomNavigationBarItem(
+              icon: Icon(
+                Icons.grid_3x3,
+              ),
+              label: 'Grid'
+            ),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.black,
