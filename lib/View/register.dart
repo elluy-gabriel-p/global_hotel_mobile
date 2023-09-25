@@ -291,16 +291,20 @@ class _RegisterViewState extends State<RegisterView> {
                                   if (agreement == true) {
                                     bool registrationSuccessful = true;
                                     Map<String, dynamic> FormData = {};
-                                    FormData['username'] =
-                                        usernameController.text;
-                                    FormData['password'] =
-                                        passwordController.text;
+                                    FormData['username'] =  usernameController.text;
+                                    FormData['password'] = passwordController.text;
                                     FormData['email'] = emailController.text;
                                     FormData['notelp'] = notelpController.text;
                                     if (registrationSuccessful) {
                                       _showAlertDialog('Success',
                                           'Registrasi berhasil!', FormData);
                                     }
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (_) => LoginView(
+                                                  data: FormData,
+                                                )));
                                   } else {
                                     Map<String, dynamic> FormData = {};
                                     _showAlertDialog(

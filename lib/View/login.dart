@@ -16,11 +16,11 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> {
   final _formKey = GlobalKey<FormState>();
   bool _isSecurePassword = true;
-  TextEditingController usernameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController usernameController = TextEditingController();
+    TextEditingController passwordController = TextEditingController();
     Map? dataForm = widget.data;
     return Consumer(builder: (context, ThemeModel themeNotifier, child) {
       return Scaffold(
@@ -115,7 +115,8 @@ class _LoginViewState extends State<LoginView> {
                           ElevatedButton(
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
-                                if (dataForm!['username'] ==
+                                if (dataForm != null &&
+                                    dataForm['username'] ==
                                         usernameController.text &&
                                     dataForm['password'] ==
                                         passwordController.text) {
@@ -167,6 +168,9 @@ class _LoginViewState extends State<LoginView> {
                           Container(
                             child: TextButton(
                               onPressed: () {
+                                Map<String, dynamic> formData = {};
+                                formData['username'] = usernameController.text;
+                                formData['password'] = passwordController.text;
                                 pushRegister(context);
                               },
                               child: const Text('Belum punya akun ?'),
