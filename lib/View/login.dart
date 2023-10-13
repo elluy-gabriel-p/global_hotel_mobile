@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ugdlayout2/View/register.dart';
 import 'package:ugdlayout2/View/home.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ugdlayout2/component/form_component.dart';
 import 'package:ugdlayout2/theme_model.dart';
 import 'package:provider/provider.dart';
@@ -126,7 +127,23 @@ class _LoginViewState extends State<LoginView> {
                                       builder: (_) => const HomeView(),
                                     ),
                                   );
+                                  Fluttertoast.showToast(
+                                      msg: "Login Success",
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.CENTER,
+                                      timeInSecForIosWeb: 1,
+                                      backgroundColor: Colors.lightGreenAccent,
+                                      textColor: Colors.white,
+                                      fontSize: 16.0);
                                 } else {
+                                  Fluttertoast.showToast(
+                                      msg: "Login Failed",
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.CENTER,
+                                      timeInSecForIosWeb: 1,
+                                      backgroundColor: Colors.red,
+                                      textColor: Colors.white,
+                                      fontSize: 16.0);
                                   showDialog(
                                     context: context,
                                     builder: (_) => AlertDialog(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:ugdlayout2/component/passForm.dart';
 import 'package:ugdlayout2/view/login.dart';
@@ -86,14 +87,15 @@ class _RegisterViewState extends State<RegisterView> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     CircleAvatar(
-                      radius: 22,
+                      radius: 13,
                       backgroundImage: AssetImage('image/globalHotelLogo.png'),
                     ),
-                    SizedBox(height: 20),
+                    SizedBox(height: 5),
                     Container(
                       padding: EdgeInsets.all(16.0),
                       decoration: BoxDecoration(
-                        color: themeNotifier.isDark ? Colors.black : Colors.white,
+                        color:
+                            themeNotifier.isDark ? Colors.black : Colors.white,
                         borderRadius: BorderRadius.circular(10.0),
                         boxShadow: [
                           BoxShadow(
@@ -125,7 +127,7 @@ class _RegisterViewState extends State<RegisterView> {
                             },
                           ),
 
-                          SizedBox(height: 20),
+                          SizedBox(height: 5),
 
                           TextFormField(
                             controller: emailController,
@@ -144,7 +146,7 @@ class _RegisterViewState extends State<RegisterView> {
                             },
                           ),
 
-                          SizedBox(height: 20),
+                          SizedBox(height: 5),
 
                           TextFormField(
                             controller: passwordController,
@@ -176,10 +178,11 @@ class _RegisterViewState extends State<RegisterView> {
                             },
                           ),
 
-                          SizedBox(height: 20),
+                          SizedBox(height: 5),
 
                           TextFormField(
                             controller: notelpController,
+                            keyboardType: TextInputType.number,
                             decoration: InputDecoration(
                               labelText: "No. Telepon",
                               prefixIcon: Icon(Icons.phone_android),
@@ -188,14 +191,17 @@ class _RegisterViewState extends State<RegisterView> {
                               if (value == null || value.isEmpty) {
                                 return "No. Telepon tidak boleh kosong";
                               }
+                              if (value.length > 20) {
+                                return "Panjang no telepon tidak boleh lebih dari 20";
+                              }
                               return null;
                             },
                           ),
 
-                          SizedBox(height: 20),
+                          SizedBox(height: 5),
                           //select sex
                           Padding(
-                            padding: const EdgeInsets.only(left: 5, top: 5),
+                            padding: const EdgeInsets.only(left: 5, top: 1),
                             child: Row(
                               children: [
                                 Text('Gender :'),
@@ -227,7 +233,7 @@ class _RegisterViewState extends State<RegisterView> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(left: 10, top: 10),
+                            padding: const EdgeInsets.only(left: 10, top: 1),
                             child: SizedBox(
                               width: 350,
                               child: TextField(
@@ -270,7 +276,7 @@ class _RegisterViewState extends State<RegisterView> {
                           ),
                           //user agreement
                           Padding(
-                            padding: const EdgeInsets.only(left: 20, top: 20),
+                            padding: const EdgeInsets.only(left: 20, top: 2),
                             child: Column(
                               children: [
                                 CheckboxListTile(
@@ -291,13 +297,24 @@ class _RegisterViewState extends State<RegisterView> {
                                   if (agreement == true) {
                                     bool registrationSuccessful = true;
                                     Map<String, dynamic> FormData = {};
-                                    FormData['username'] =  usernameController.text;
-                                    FormData['password'] = passwordController.text;
+                                    FormData['username'] =
+                                        usernameController.text;
+                                    FormData['password'] =
+                                        passwordController.text;
                                     FormData['email'] = emailController.text;
                                     FormData['notelp'] = notelpController.text;
                                     if (registrationSuccessful) {
                                       _showAlertDialog('Success',
                                           'Registrasi berhasil!', FormData);
+                                      Fluttertoast.showToast(
+                                          msg: "Register Success",
+                                          toastLength: Toast.LENGTH_SHORT,
+                                          gravity: ToastGravity.CENTER,
+                                          timeInSecForIosWeb: 1,
+                                          backgroundColor:
+                                              Colors.lightGreenAccent,
+                                          textColor: Colors.white,
+                                          fontSize: 16.0);
                                     }
                                     Navigator.push(
                                         context,
@@ -312,6 +329,15 @@ class _RegisterViewState extends State<RegisterView> {
                                         'Please check the user agreement',
                                         FormData);
                                   }
+                                } else {
+                                  Fluttertoast.showToast(
+                                      msg: "Register Failed",
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.CENTER,
+                                      timeInSecForIosWeb: 1,
+                                      backgroundColor: Colors.red,
+                                      textColor: Colors.white,
+                                      fontSize: 16.0);
                                 }
                               },
                               style: ButtonStyle(
