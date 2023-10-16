@@ -3,7 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:ugdlayout2/component/passForm.dart';
-import 'package:ugdlayout2/database/sql_helper.dart';
+import 'package:ugdlayout2/database/sql_helper_user.dart';
 import 'package:ugdlayout2/view/login.dart';
 import 'package:ugdlayout2/component/form_component.dart';
 import 'package:ugdlayout2/theme_model.dart';

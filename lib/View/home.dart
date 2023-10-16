@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:ugdlayout2/View/view_list.dart';
 import 'package:ugdlayout2/View/view_grid.dart';
-import 'package:ugdlayout2/entity/user.dart';
+import 'package:ugdlayout2/View/kamar_page.dart';
+import 'package:ugdlayout2/View/profile.dart';
 
 class HomeView extends StatefulWidget {
-  const HomeView({super.key, required this.loggedinUser});
-
-  final User? loggedinUser;
+  const HomeView({super.key});
 
   @override
   State<HomeView> createState() => _HomeViewState();
@@ -26,6 +25,12 @@ class _HomeViewState extends State<HomeView> {
 
     //*index 1
     ListGrid(),
+
+    //*index 2
+    KamarPage(title: 'SQFLITE'),
+
+    //*index 3
+    ProfilePage(),
   ];
 
   @override
@@ -34,15 +39,33 @@ class _HomeViewState extends State<HomeView> {
       bottomNavigationBar: BottomNavigationBar(
         items: const [
           BottomNavigationBarItem(
-              icon: Icon(
-                Icons.list,
-              ),
-              label: 'List'),
+            icon: Icon(
+              Icons.list,
+            ),
+            label: 'List',
+            backgroundColor: Colors.red,
+          ),
           BottomNavigationBarItem(
-              icon: Icon(
-                Icons.grid_3x3,
-              ),
-              label: 'Grid'),
+            icon: Icon(
+              Icons.grid_3x3,
+            ),
+            label: 'Grid',
+            backgroundColor: Colors.green,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.bedroom_child_rounded,
+            ),
+            label: 'Kamar',
+            backgroundColor: Colors.purple,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.account_circle,
+            ),
+            label: 'Profile',
+            backgroundColor: Colors.pink,
+          ),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.black,
