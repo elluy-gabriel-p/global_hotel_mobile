@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:intl/intl.dart';
+import 'package:ugdlayout2/database/sql_helper_user.dart';
+import 'package:shared_preferences/shared_preferences.dart'; // Import shared_preferences.dart or the appropriate package for data storage.
 
 class EditProfilePage extends StatefulWidget {
-  const EditProfilePage({Key? key}) : super(key: key);
-
   @override
   _EditProfilePageState createState() => _EditProfilePageState();
 }
@@ -14,7 +12,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController notelpController = TextEditingController();
-  DateTime? selectedDate;
+  TextEditingController borndateController = TextEditingController();
 
   bool _showPassword = false;
 
@@ -26,6 +24,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   Future<void> loadUserData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    // Load the user's data and set it in the respective controllers.
     String? username = prefs.getString('username');
     String? email = prefs.getString('email');
     String? password = prefs.getString('password');
@@ -37,8 +36,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       emailController.text = email ?? '';
       passwordController.text = password ?? '';
       notelpController.text = noTelp != null ? noTelp.toString() : '';
-      // Parse tanggal dari String ke DateTime
-      selectedDate = date != null ? DateTime.parse(date) : null;
+      borndateController.text = date ?? '';
     });
   }
 
@@ -73,8 +71,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 prefixIcon: Icon(Icons.lock),
                 suffixIcon: IconButton(
                   icon: Icon(
-                    _showPassword ? Icons.visibility : Icons.visibility_off,
-                  ),
+                      _showPassword ? Icons.visibility : Icons.visibility_off),
                   onPressed: () {
                     setState(() {
                       _showPassword = !_showPassword;
@@ -91,77 +88,58 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 prefixIcon: Icon(Icons.phone_android),
               ),
             ),
-            InkWell(
-              onTap: () {
-                _selectDate(context);
-              },
-              child: InputDecorator(
-                decoration: InputDecoration(
-                  labelText: 'Tanggal Lahir',
-                  prefixIcon: Icon(Icons.calendar_today),
-                ),
-                child: selectedDate == null
-                    ? Text('Pilih Tanggal Lahir')
-                    : Text(DateFormat('dd-MM-yyyy').format(selectedDate!)),
+            TextFormField(
+              controller: borndateController,
+              decoration: InputDecoration(
+                labelText: 'Tanggal Lahir',
+                prefixIcon: Icon(Icons.calendar_today),
               ),
             ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          saveUserData();
+        onPressed: () {
+          // Save the edited data and return to the ProfilePage.
+          saveEditedData();
           Navigator.pop(context, true);
         },
-        child: Ink(
-          decoration: const ShapeDecoration(
-            color: Colors.blue,
-            shape: CircleBorder(),
-          ),
-          child: IconButton(
-            icon: Icon(
-              Icons.save,
-              color: Colors.white,
-            ),
-            onPressed: () async {
-              saveUserData();
-              Navigator.pop(context, true);
-            },
-          ),
-        ),
+        child: Icon(Icons.save),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 
-  Future<void> _selectDate(BuildContext context) async {
-    DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: selectedDate ?? DateTime.now(),
-      firstDate: DateTime(1900),
-      lastDate: DateTime.now(),
-    );
-
-    if (pickedDate != null) {
-      setState(() {
-        selectedDate = pickedDate;
-      });
-    }
-  }
-
-  Future<void> saveUserData() async {
+  Future<void> saveEditedData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('username', usernameController.text);
-    await prefs.setString('email', emailController.text);
-    await prefs.setString(
-        'password', passwordController.text); // Perbarui password
-    await prefs.setInt('noTelp', int.tryParse(notelpController.text) ?? 0);
-    // Format tanggal menjadi string sebelum disimpan
-    await prefs.setString(
-      'tanggalLahir',
-      selectedDate != null
-          ? DateFormat('yyyy-MM-dd').format(selectedDate!)
-          : '',
+    final username = usernameController.text;
+    final email = emailController.text;
+    final password = passwordController.text;
+    final notelp = notelpController.text;
+    final borndate = borndateController.text;
+
+    // Save the edited data to SharedPreferences.
+    await prefs.setString('username', username);
+    await prefs.setString('email', email);
+    await prefs.setString('password', password);
+    await prefs.setString('noTelp', notelp);
+    await prefs.setString('tanggalLahir', borndate);
+
+    // Update the SQLite database with the edited data.
+    final db = await SQLHelper.db();
+    await db.rawUpdate(
+      'UPDATE user SET username = ?, email = ?, password = ?, notelp = ?, borndate = ? WHERE id = ?',
+      [
+        username,
+        email,
+        password,
+        notelp,
+        borndate,
+        1
+      ], // Replace '1' with the actual user ID
     );
+
+    // Return 'true' to indicate changes were made.
+    Navigator.pop(context, true);
   }
 }

@@ -111,7 +111,7 @@ class _ProfilePageState extends State<ProfilePage> {
             MaterialPageRoute(builder: (context) => EditProfilePage()),
           );
           if (result != null && result) {
-            loadUserData(); // Perbarui tampilan jika ada perubahan
+            loadUserData(); // Update the UI if changes were made.
           }
         },
         child: Icon(Icons.edit),

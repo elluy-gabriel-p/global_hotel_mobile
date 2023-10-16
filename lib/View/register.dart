@@ -44,7 +44,6 @@ class _RegisterViewState extends State<RegisterView> {
   var listUser = SQLHelper.getUser();
 
   void initState() {
-    dateinput.text = "--/--/----";
     super.initState();
   }
 
@@ -248,7 +247,7 @@ class _RegisterViewState extends State<RegisterView> {
                             padding: const EdgeInsets.only(left: 10, top: 1),
                             child: SizedBox(
                               width: 350,
-                              child: TextField(
+                              child: TextFormField(
                                 controller: dateinput,
                                 decoration: InputDecoration(
                                   labelText: "Date of Birth",
@@ -265,13 +264,12 @@ class _RegisterViewState extends State<RegisterView> {
                                         BorderSide(color: Colors.black45),
                                   ),
                                 ),
-                                readOnly: true,
                                 onTap: () async {
                                   var date = await showDatePicker(
                                       context: context,
                                       initialDate: DateTime(2000),
                                       firstDate: DateTime(1900),
-                                      lastDate: DateTime(2005));
+                                      lastDate: DateTime(2023));
 
                                   if (date != null) {
                                     print(date);
@@ -282,6 +280,15 @@ class _RegisterViewState extends State<RegisterView> {
                                       dateinput.text = formatDate;
                                     });
                                   }
+                                },
+                                validator: (value) {
+                                  if (value == '') {
+                                    return "Tanggal Lahir Tidak Boleh Kosong";
+                                  }
+                                  if (value == '--/--/----') {
+                                    return "Format Tanggal Salah";
+                                  }
+                                  return null;
                                 },
                               ),
                             ),
