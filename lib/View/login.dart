@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ugdlayout2/View/register.dart';
 import 'package:ugdlayout2/View/home.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ugdlayout2/component/form_component.dart';
-import 'package:ugdlayout2/database/sql_helper.dart';
+import 'package:ugdlayout2/database/sql_helper_user.dart';
 import 'package:ugdlayout2/theme_model.dart';
 import 'package:ugdlayout2/entity/user.dart';
 import 'package:provider/provider.dart';
@@ -23,6 +24,15 @@ class _LoginViewState extends State<LoginView> {
   TextEditingController passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _isSecurePassword = true;
+
+  Future<void> setUserData(userVelue) async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setString('username', userVelue.username);
+    pref.setString('email', userVelue.email);
+    pref.setString('password', userVelue.password);
+    pref.setString('noTelp', userVelue.notelp);
+    pref.setString('tanggalLahir', userVelue.borndate);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -124,6 +134,8 @@ class _LoginViewState extends State<LoginView> {
                                 passwordController.text,
                               );
 
+                              setUserData(logUser);
+
                               if (_formKey.currentState!.validate()) {
                                 if (logUser != null) {
                                   Fluttertoast.showToast(
@@ -140,9 +152,7 @@ class _LoginViewState extends State<LoginView> {
                                     context,
                                     MaterialPageRoute(
 // LEMPAR  DATA USER YANG LOGIN KE HOME VIEW (kalau mau diubah disini)
-                                      builder: (_) => HomeView(
-                                        loggedinUser: logUser,
-                                      ),
+                                      builder: (_) => const HomeView(),
                                     ),
                                   );
                                 } else {
