@@ -3,7 +3,9 @@ import 'package:ugdlayout2/View/register.dart';
 import 'package:ugdlayout2/View/home.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ugdlayout2/component/form_component.dart';
+import 'package:ugdlayout2/database/sql_helper.dart';
 import 'package:ugdlayout2/theme_model.dart';
+import 'package:ugdlayout2/entity/user.dart';
 import 'package:provider/provider.dart';
 
 class LoginView extends StatefulWidget {
@@ -14,14 +16,16 @@ class LoginView extends StatefulWidget {
   State<LoginView> createState() => _LoginViewState();
 }
 
+User user = User();
+
 class _LoginViewState extends State<LoginView> {
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _isSecurePassword = true;
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController usernameController = TextEditingController();
-    TextEditingController passwordController = TextEditingController();
     Map? dataForm = widget.data;
     return Consumer(builder: (context, ThemeModel themeNotifier, child) {
       return Scaffold(
@@ -114,36 +118,44 @@ class _LoginViewState extends State<LoginView> {
 
                           // Login Button
                           ElevatedButton(
-                            onPressed: () {
+                            onPressed: () async {
+                              User? logUser = await SQLHelper.forLogin(
+                                usernameController.text,
+                                passwordController.text,
+                              );
+
                               if (_formKey.currentState!.validate()) {
-                                if (dataForm != null &&
-                                    dataForm['username'] ==
-                                        usernameController.text &&
-                                    dataForm['password'] ==
-                                        passwordController.text) {
+                                if (logUser != null) {
+                                  Fluttertoast.showToast(
+                                    msg: "Login Success",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.CENTER,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: Colors.lightGreenAccent,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0,
+                                  );
+
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (_) => const HomeView(),
+// LEMPAR  DATA USER YANG LOGIN KE HOME VIEW (kalau mau diubah disini)
+                                      builder: (_) => HomeView(
+                                        loggedinUser: logUser,
+                                      ),
                                     ),
                                   );
-                                  Fluttertoast.showToast(
-                                      msg: "Login Success",
-                                      toastLength: Toast.LENGTH_SHORT,
-                                      gravity: ToastGravity.CENTER,
-                                      timeInSecForIosWeb: 1,
-                                      backgroundColor: Colors.lightGreenAccent,
-                                      textColor: Colors.white,
-                                      fontSize: 16.0);
                                 } else {
                                   Fluttertoast.showToast(
-                                      msg: "Login Failed",
-                                      toastLength: Toast.LENGTH_SHORT,
-                                      gravity: ToastGravity.CENTER,
-                                      timeInSecForIosWeb: 1,
-                                      backgroundColor: Colors.red,
-                                      textColor: Colors.white,
-                                      fontSize: 16.0);
+                                    msg: "Login Failed",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.CENTER,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: Colors.red,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0,
+                                  );
+
                                   showDialog(
                                     context: context,
                                     builder: (_) => AlertDialog(
@@ -184,11 +196,19 @@ class _LoginViewState extends State<LoginView> {
                           // Register
                           Container(
                             child: TextButton(
-                              onPressed: () {
-                                Map<String, dynamic> formData = {};
-                                formData['username'] = usernameController.text;
-                                formData['password'] = passwordController.text;
-                                pushRegister(context);
+                              onPressed: () async {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => RegisterView(
+                                        id: null,
+                                        username: null,
+                                        email: null,
+                                        password: null,
+                                        notelp: null,
+                                        borndate: null),
+                                  ),
+                                );
                               },
                               child: const Text('Belum punya akun ?'),
                             ),
@@ -210,8 +230,18 @@ class _LoginViewState extends State<LoginView> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (_) => const RegisterView(),
+        builder: (_) => const RegisterView(
+            id: null,
+            username: null,
+            password: null,
+            email: null,
+            notelp: null,
+            borndate: null),
       ),
     );
+  }
+
+  Future<void> forLogin() async {
+    await SQLHelper.forLogin(usernameController.text, passwordController.text);
   }
 }

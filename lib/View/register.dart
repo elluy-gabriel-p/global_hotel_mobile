@@ -3,14 +3,24 @@ import 'package:flutter/rendering.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:ugdlayout2/component/passForm.dart';
+import 'package:ugdlayout2/database/sql_helper.dart';
 import 'package:ugdlayout2/view/login.dart';
 import 'package:ugdlayout2/component/form_component.dart';
 import 'package:ugdlayout2/theme_model.dart';
 import 'package:provider/provider.dart';
 
 class RegisterView extends StatefulWidget {
-  const RegisterView({super.key});
+  const RegisterView(
+      {super.key,
+      required this.id,
+      required this.username,
+      required this.email,
+      required this.password,
+      required this.notelp,
+      required this.borndate});
 
+  final int? id;
+  final String? username, password, email, notelp, borndate;
   @override
   State<RegisterView> createState() => _RegisterViewState();
 }
@@ -30,6 +40,8 @@ class _RegisterViewState extends State<RegisterView> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController notelpController = TextEditingController();
+
+  var listUser = SQLHelper.getUser();
 
   void initState() {
     dateinput.text = "--/--/----";
@@ -292,7 +304,7 @@ class _RegisterViewState extends State<RegisterView> {
                             ),
                           ),
                           ElevatedButton(
-                              onPressed: () {
+                              onPressed: () async {
                                 if (_formKey.currentState!.validate()) {
                                   if (agreement == true) {
                                     bool registrationSuccessful = true;
@@ -303,6 +315,7 @@ class _RegisterViewState extends State<RegisterView> {
                                         passwordController.text;
                                     FormData['email'] = emailController.text;
                                     FormData['notelp'] = notelpController.text;
+                                    FormData['borndate'] = dateinput.text;
                                     if (registrationSuccessful) {
                                       _showAlertDialog('Success',
                                           'Registrasi berhasil!', FormData);
@@ -315,13 +328,15 @@ class _RegisterViewState extends State<RegisterView> {
                                               Colors.lightGreenAccent,
                                           textColor: Colors.white,
                                           fontSize: 16.0);
+
+                                      if (widget.id == null) {
+                                        await addUser();
+                                      }
                                     }
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (_) => LoginView(
-                                                  data: FormData,
-                                                )));
+                                            builder: (_) => LoginView()));
                                   } else {
                                     Map<String, dynamic> FormData = {};
                                     _showAlertDialog(
@@ -357,5 +372,15 @@ class _RegisterViewState extends State<RegisterView> {
         ),
       );
     });
+  }
+
+  Future<void> addUser() async {
+    await SQLHelper.addUser(
+      usernameController.text,
+      emailController.text,
+      passwordController.text,
+      notelpController.text,
+      dateinput.text,
+    );
   }
 }

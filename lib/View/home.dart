@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:ugdlayout2/View/view_list.dart';
 import 'package:ugdlayout2/View/view_grid.dart';
+import 'package:ugdlayout2/entity/user.dart';
 
 class HomeView extends StatefulWidget {
-  const HomeView({super.key});
+  const HomeView({super.key, required this.loggedinUser});
+
+  final User? loggedinUser;
 
   @override
   State<HomeView> createState() => _HomeViewState();
