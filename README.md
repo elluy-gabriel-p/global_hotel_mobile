@@ -4,7 +4,7 @@
 2. Bonaventura Dimas Dyan Bagaskara (210711088)
 3. Elluy Gabriel Panambe (210711306)
 4. Tiffany Amanda P K Mega (210711483)
-5. Iqbal Firmansyah Adinda (210711485)
+5. Iqbal Firmansyah Adinda (210711485) mengerjakan CRUD untuk kamar, membuat input kamar
 
 ## Deskripsi Project
 Membuat aplikasi booking hotel sederhana yang berbasis di Android menggunakan bahasa pemograman dart. Aplikasi ini memiliki 1 role user, yakni pengguna yang hendak memesan kamar hotel. Project ini dibuat untuk memenuhi tugas matakuliah Pemograman Berorientasi Platform.
