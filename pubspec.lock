@@ -192,7 +192,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.17.0"
-
   js:
     dependency: transitive
     description:
@@ -201,7 +200,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.7"
-
+  latlong2:
+    dependency: "direct main"
+    description:
+      name: latlong2
+      sha256: "18712164760cee655bc790122b0fd8f3d5b3c36da2cb7bf94b68a197fbb0811b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.9.0"
   lints:
     dependency: transitive
     description:
@@ -250,7 +256,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.9.1"
-
+  mgrs_dart:
+    dependency: transitive
+    description:
+      name: mgrs_dart
+      sha256: fb89ae62f05fa0bb90f70c31fc870bcbcfd516c843fb554452ab3396f78586f7
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
   mobile_scanner:
     dependency: "direct dev"
     description:
@@ -259,7 +272,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.5.2"
-
   nested:
     dependency: transitive
     description:
