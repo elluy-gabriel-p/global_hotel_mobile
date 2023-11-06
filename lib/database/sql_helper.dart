@@ -1,11 +1,27 @@
+import 'dart:typed_data';
+
 import 'package:sqflite/sqflite.dart' as sql;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
 import 'package:ugdlayout2/entity/user.dart';
 
 class SQLHelper {
+  static Future<void> updateProfilePicture(int idUser, Uint8List image) async {
+    final db = await SQLHelper.db();
+
+    await db.update(
+      'user',
+      {
+        'imageProfile': image,
+      },
+      where: 'idUser = ?',
+      whereArgs: [idUser],
+    );
+  }
+
   static Future<void> createTables(sql.Database database) async {
-    await database.execute("""
+    await database.execute(
+        """
       CREATE TABLE user(
       id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
       username TEXT,
@@ -97,4 +113,6 @@ class SQLHelper {
     }
     return null;
   }
+
+  static void insertImage(int id, Uint8List imageBytes) {}
 }

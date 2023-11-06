@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:sqflite/sqflite.dart' as sql;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
@@ -5,16 +7,28 @@ import 'package:ugdlayout2/entity/user.dart';
 
 class SQLHelper {
   static Future<void> createTables(sql.Database database) async {
-    await database.execute("""
+    await database.execute(
+        """
       CREATE TABLE user(
       id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
       username TEXT,
       email TEXT,
       password TEXT,
       notelp TEXT,
-      borndate TEXT
+      borndate TEXT,
+      profileImage BLOB
       )
       """);
+  }
+
+  //update profile images
+  static Future<int> updateProfileImages(
+    String username, Uint8List profileImage) async {
+    final db = await SQLHelper.db();
+    final data = {
+      'profileImage': profileImage
+    };
+    return db.update('user', data, where: 'username = ?', whereArgs: [username]);
   }
 
   //cal db
@@ -60,11 +74,15 @@ class SQLHelper {
     return await db.insert('user', data);
   }
 
+
+
 //read Employee
   static Future<List<Map<String, dynamic>>> getUser() async {
     final db = await SQLHelper.db();
     return db.query('user');
   }
+
+
 
 //update Employee
   static Future<int> editUser(int id, String username, String email,
@@ -96,5 +114,34 @@ class SQLHelper {
       return User.fromMap(temp[0]);
     }
     return null;
+  }
+
+  static Future<int> insertImage(int userId, Uint8List image) async {
+    final db = await SQLHelper.db();
+
+    return await db.update(
+      'user',
+      {'imageProfile': image},
+      where: 'id = ?',
+      whereArgs: [userId],
+    );
+  }
+
+  static Future<Uint8List?> getImageProfile(int userId) async {
+    final db = await SQLHelper.db();
+    List<Map<String, dynamic>> result = await db.query(
+      'user',
+      columns: ['imageProfile'],
+      where: 'id = ?',
+      whereArgs: [userId],
+    );
+
+    if (result.isNotEmpty && result.first['imageProfile'] != null) {
+      return result.first['imageProfile'] as Uint8List;
+    } else if (result.first['imageProfile'] == null) {
+      return null;
+    } else {
+      return null;
+    }
   }
 }
