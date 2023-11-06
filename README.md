@@ -15,3 +15,9 @@ Membuat aplikasi booking hotel sederhana yang berbasis di Android menggunakan ba
 - Enhance Home Page : grid
 - Floating action button for dark theme and light theme
 - Taskbar
+
+## UGD HARDWARE
+- Profile Picture
+- Camera ( validasi Qr untuk check in)
+- GPS
+- Brightness layar otomatis
