@@ -3,6 +3,7 @@ import 'package:ugdlayout2/View/view_list.dart';
 import 'package:ugdlayout2/View/view_grid.dart';
 import 'package:ugdlayout2/View/kamar_page.dart';
 import 'package:ugdlayout2/View/profile.dart';
+import 'package:ugdlayout2/View/my_booking/on_going.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -31,6 +32,9 @@ class _HomeViewState extends State<HomeView> {
 
     //*index 3
     ProfilePage(),
+
+    //*index 4
+    OnGoing(),
   ];
 
   @override
@@ -65,6 +69,13 @@ class _HomeViewState extends State<HomeView> {
             ),
             label: 'Profile',
             backgroundColor: Colors.pink,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.bookmark,
+            ),
+            label: 'My Booking',
+            backgroundColor: Colors.yellow,
           ),
         ],
         currentIndex: _selectedIndex,
