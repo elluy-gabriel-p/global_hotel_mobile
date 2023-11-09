@@ -1,7 +1,11 @@
+import 'dart:ffi';
+import 'dart:typed_data';
+
 class User {
   final int? id;
 
   String? username, email, password, notelp, borndate;
+  Uint8List? dataImage;
 
   User(
       {this.id,
@@ -9,7 +13,8 @@ class User {
       this.email,
       this.password,
       this.notelp,
-      this.borndate});
+      this.borndate,
+      this.dataImage});
 
   Map<String, dynamic> toMap() {
     return {

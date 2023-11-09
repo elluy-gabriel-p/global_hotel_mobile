@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:ugdlayout2/View/view_list.dart';
 import 'package:ugdlayout2/View/view_grid.dart';
 import 'package:ugdlayout2/View/kamar_page.dart';
-import 'package:ugdlayout2/View/profile.dart';
-import 'package:ugdlayout2/View/my_booking/on_going.dart';
+import 'package:ugdlayout2/View/user/profile/profile.dart';
+import 'package:ugdlayout2/View/user/my_booking/on_going.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ugdlayout2/View/my_booking/history.dart';
+import 'package:ugdlayout2/View/user/my_booking/history.dart';
 
 class Success extends StatefulWidget {
   const Success({super.key});

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:ugdlayout2/View/my_booking/check_in/scanner_error_widget.dart';
-import 'package:ugdlayout2/View/my_booking/check_in/success.dart';
+import 'package:ugdlayout2/View/user/my_booking/check_in/scanner_error_widget.dart';
+import 'package:ugdlayout2/View/user/my_booking/check_in/success.dart';
 
 class BarcodeScannerPageView extends StatefulWidget {
   const BarcodeScannerPageView({Key? key}) : super(key: key);
