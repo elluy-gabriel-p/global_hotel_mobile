@@ -24,6 +24,11 @@ dependencies:
 
   camera: ^0.10.5+2
   image_picker: ^0.8.6
+  pdf: ^3.6.4
+  printing: ^5.9.0
+  barcode_widget: ^2.0.4
+  uuid: ^3.0.6
+  responsive_sizer: ^3.2.0
 
 dev_dependencies:
   flutter_test:

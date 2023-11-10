@@ -134,8 +134,6 @@ class _LoginViewState extends State<LoginView> {
                                 passwordController.text,
                               );
 
-                              setUserData(logUser);
-
                               if (_formKey.currentState!.validate()) {
                                 if (logUser != null) {
                                   Fluttertoast.showToast(
@@ -147,7 +145,7 @@ class _LoginViewState extends State<LoginView> {
                                     textColor: Colors.white,
                                     fontSize: 16.0,
                                   );
-
+                                  setUserData(logUser);
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -168,7 +166,8 @@ class _LoginViewState extends State<LoginView> {
 
                                   showDialog(
                                     context: context,
-                                    builder: (_) => AlertDialog(
+                                    builder: (BuildContext context) =>
+                                        AlertDialog(
                                       title: const Text('Password Salah'),
                                       content: TextButton(
                                         onPressed: () => pushRegister(context),
@@ -177,7 +176,7 @@ class _LoginViewState extends State<LoginView> {
                                       actions: <Widget>[
                                         TextButton(
                                           onPressed: () =>
-                                              Navigator.pop(context, 'Cancel'),
+                                              Navigator.of(context).pop(),
                                           child: const Text('Cancel'),
                                         ),
                                         TextButton(

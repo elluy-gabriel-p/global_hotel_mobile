@@ -1,12 +1,17 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:ugdlayout2/database/sql_helper_kamar.dart';
 import 'package:ugdlayout2/entity/kamar.dart';
+import 'package:ugdlayout2/View/user/profile/profile.dart';
 
 class KamarPage extends StatefulWidget {
-  const KamarPage({Key? key, required this.title});
+  const KamarPage({Key? key, required this.title, this.dataImage})
+      : super(key: key);
 
   final String title;
+  final Uint8List? dataImage; // Ensure this line is present
 
   @override
   State<KamarPage> createState() => _KamarPageState();
@@ -30,6 +35,8 @@ class _KamarPageState extends State<KamarPage> {
 
   @override
   Widget build(BuildContext context) {
+    Uint8List? image = widget.dataImage; // Ensure this line is present
+
     return Scaffold(
       appBar: AppBar(
         title: Text("KAMAR"),
@@ -40,8 +47,9 @@ class _KamarPageState extends State<KamarPage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => InputKamarDetailsPage(
-                    title: 'INPUT KAMAR',
+                  builder: (context) => KamarPage(
+                    title: 'KAMAR',
+                    dataImage: imageProfile, // Now imageProfile is accessible
                   ),
                 ),
               ).then((_) => refresh());
@@ -87,6 +95,47 @@ class _KamarPageState extends State<KamarPage> {
                 icon: Icons.delete,
                 onTap: () async {
                   await deleteKamar(kamar[index]['id']);
+                },
+              ),
+              IconSlideAction(
+                caption: 'Detail',
+                color: Colors.green,
+                icon: Icons.list,
+                onTap: () {
+                  if (image == null ||
+                      kamar[index]['tipe'].isEmpty ||
+                      kamar[index]['harga'].isEmpty ||
+                      kamar[index]['kapasitas'].isEmpty ||
+                      kamar[index]['status'].isEmpty) {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: const Text('Warning'),
+                        content: const Text('Please fill in all the fields.'),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: const Text('OK'),
+                          ),
+                        ],
+                      ),
+                    );
+                  } else {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => InputKamarDetailsPage(
+                          title: 'Detail Kamar',
+                          dataImage: widget.dataImage,
+                          id: kamar[index]['id'],
+                          tipe: kamar[index]['tipe'],
+                          harga: kamar[index]['harga'],
+                          kapasitas: kamar[index]['kapasitas'],
+                          status: kamar[index]['status'],
+                        ),
+                      ),
+                    );
+                  }
                 },
               ),
             ],

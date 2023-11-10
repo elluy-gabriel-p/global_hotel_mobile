@@ -51,7 +51,7 @@ class _RegisterViewState extends State<RegisterView> {
       String title, String message, Map<String, dynamic> FormData) {
     showDialog(
       context: context,
-      builder: (BuildContext context) {
+      builder: (BuildContext contextDilaog) {
         return AlertDialog(
           title: Text(title),
           content: Text(message),
@@ -62,6 +62,7 @@ class _RegisterViewState extends State<RegisterView> {
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (_) => LoginView(data: FormData)));
+                Navigator.of(contextDilaog).pop();
               },
               child: Text('OK'),
             ),
@@ -339,11 +340,8 @@ class _RegisterViewState extends State<RegisterView> {
                                       if (widget.id == null) {
                                         await addUser();
                                       }
+                                      // Navigator.pop(context);
                                     }
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (_) => LoginView()));
                                   } else {
                                     Map<String, dynamic> FormData = {};
                                     _showAlertDialog(

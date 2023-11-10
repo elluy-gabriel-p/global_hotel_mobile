@@ -25,7 +25,7 @@ class _ProfilePageState extends State<ProfilePage> {
   TextEditingController dateController = TextEditingController();
 
   bool _showPassword = false;
-  Uint8List? imageProfile = null;
+  Uint8List? imageProfile;
 
   @override
   void initState() {

@@ -191,7 +191,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               backgroundColor: MaterialStateProperty.all<Color>(
                                   const Color.fromARGB(255, 65, 64, 64)),
                             ),
-                            child: const Text('Edit Profile')),
+                            child: const Text('Save Changes')),
                       )
                     ],
                   ),

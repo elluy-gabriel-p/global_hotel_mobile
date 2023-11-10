@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ugdlayout2/View/user/my_booking/history.dart';
 import 'package:ugdlayout2/View/user/my_booking/check_in/scan_qr_page.dart ';
+import 'package:ugdlayout2/View/user/my_booking/check_in/generate_qr_page.dart';
 
 class OnGoing extends StatefulWidget {
   const OnGoing({super.key});
@@ -192,11 +193,63 @@ class _OnGoingState extends State<OnGoing> {
                               children: [
                                 ElevatedButton(
                                   onPressed: () {
-                                    Navigator.of(context)
-                                        .push(MaterialPageRoute(
-                                      builder: (context) =>
-                                          BarcodeScannerPageView(),
-                                    ));
+                                    showModalBottomSheet(
+                                        context: context,
+                                        builder: ((builder) {
+                                          return Container(
+                                            height: 100.0,
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            margin: EdgeInsets.symmetric(
+                                              horizontal: 20,
+                                              vertical: 20,
+                                            ),
+                                            child: Column(
+                                              children: <Widget>[
+                                                Text(
+                                                  "Choose Check-in Method",
+                                                  style: TextStyle(
+                                                    fontSize: 20.0,
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  height: 20,
+                                                ),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceEvenly,
+                                                  children: <Widget>[
+                                                    TextButton.icon(
+                                                        onPressed: () {
+                                                          Navigator.of(context)
+                                                              .push(
+                                                                  MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                BarcodeScannerPageView(),
+                                                          ));
+                                                        },
+                                                        icon:
+                                                            Icon(Icons.qr_code),
+                                                        label: Text("Generate QR")),
+                                                    TextButton.icon(
+                                                        onPressed: () {
+                                                          Navigator.of(context)
+                                                              .push(
+                                                                  MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                GenerateQRPage(),
+                                                          ));
+                                                        },
+                                                        icon: Icon(Icons.qr_code_scanner),
+                                                        label: Text('Scan QR'))
+                                                  ],
+                                                )
+                                              ],
+                                            ),
+                                          );
+                                        }));
                                   },
                                   style: ElevatedButton.styleFrom(
                                     primary: Color.fromARGB(255, 35, 140,

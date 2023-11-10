@@ -85,15 +85,15 @@ class _MyBrightnessControlAppState extends State<MyBrightnessControlApp> {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (_) => ThemeModel(),
-      child: Consumer(
-        builder: (context, ThemeModel themeNotifier, child) {
+      builder: (context, child) {
+        return Consumer(builder: (context, ThemeModel themeNotifier, child) {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             theme: themeNotifier.isDark ? ThemeData.dark() : ThemeData.light(),
             home: LoginView(),
           );
-        },
-      ),
+        });
+      },
     );
   }
 }
