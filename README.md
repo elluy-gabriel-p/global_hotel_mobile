@@ -21,3 +21,6 @@ Membuat aplikasi booking hotel sederhana yang berbasis di Android menggunakan ba
 - Camera ( validasi Qr untuk check in)
 - GPS
 - Brightness layar otomatis
+
+## UGD LIBRARY
+- Tiffany : PDF_View, Kamar_Page(add image picker, uuid, intl, buttoncreatepdf), Preview Screen
