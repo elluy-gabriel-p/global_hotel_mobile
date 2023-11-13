@@ -8,20 +8,24 @@ environment:
 
 dependencies:
   barcode_widget: ^2.0.4
+
   camera: ^0.10.5+2
   flutter:
     sdk: flutter
+
   flutter_map: ^6.0.1
-  flutter_slidable: ^3.0.1
   fluttertoast: ^8.2.2
   geolocator: ^10.1.0
   image_picker: ^0.8.6
   intl: ^0.17.0
   latlong2: ^0.9.0
+
   pdf: ^3.10.6
   printing: ^5.11.1
   provider: ^6.0.5
+  responsive_sizer: ^3.2.0
   screen_brightness: ^0.2.2
+
   sensors: ^2.0.3
   shared_preferences: ^2.2.1
   uuid: ^4.2.1

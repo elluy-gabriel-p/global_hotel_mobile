@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ugdlayout2/View/user/my_booking/history.dart';
-import 'package:ugdlayout2/View/user/my_booking/check_in/scan_qr_page.dart ';
+import 'package:ugdlayout2/View/user/my_booking/check_in/scan_qr_page.dart';
 
 class OnGoing extends StatefulWidget {
   const OnGoing({super.key});
