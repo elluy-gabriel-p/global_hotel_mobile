@@ -8,6 +8,7 @@ import 'package:ugdlayout2/database/sql_helper_user.dart';
 import 'package:ugdlayout2/theme_model.dart';
 import 'package:ugdlayout2/entity/user.dart';
 import 'package:provider/provider.dart';
+import 'package:ugdlayout2/database/login_database.dart';
 
 class LoginView extends StatefulWidget {
   final Map? data;
@@ -129,10 +130,12 @@ class _LoginViewState extends State<LoginView> {
                           // Login Button
                           ElevatedButton(
                             onPressed: () async {
-                              User? logUser = await SQLHelper.forLogin(
-                                usernameController.text,
-                                passwordController.text,
-                              );
+                              // User? logUser = await SQLHelper.forLogin(
+                              //   usernameController.text,
+                              //   passwordController.text,
+                              // );
+                              User? logUser = await LoginClient.login(usernameController.text,
+                                passwordController.text);
 
                               setUserData(logUser);
 
@@ -223,6 +226,10 @@ class _LoginViewState extends State<LoginView> {
                               child: const Text('Belum punya akun ?'),
                             ),
                           ),
+                          // ElevatedButton(onPressed: () async {
+                          //   User data = await LoginClient.login('riksi', '12345678');
+                          //   print(data.username);
+                          // }, child: Container())
                         ],
                       ),
                     ),

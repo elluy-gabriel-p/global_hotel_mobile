@@ -6,8 +6,10 @@ import 'package:ugdlayout2/component/passForm.dart';
 import 'package:ugdlayout2/database/sql_helper_user.dart';
 import 'package:ugdlayout2/View/login.dart';
 import 'package:ugdlayout2/component/form_component.dart';
+import 'package:ugdlayout2/entity/user.dart';
 import 'package:ugdlayout2/theme_model.dart';
 import 'package:provider/provider.dart';
+import 'package:ugdlayout2/database/login_database.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView(
@@ -323,6 +325,11 @@ class _RegisterViewState extends State<RegisterView> {
                                     FormData['email'] = emailController.text;
                                     FormData['notelp'] = notelpController.text;
                                     FormData['borndate'] = dateinput.text;
+
+                                    User user= User(username: usernameController.text,email: emailController.text ,password: passwordController.text, notelp: notelpController.text, borndate: dateinput.text);
+                                    print(user.username);
+                                    LoginClient.create(user);
+
                                     if (registrationSuccessful) {
                                       _showAlertDialog('Success',
                                           'Registrasi berhasil!', FormData);
