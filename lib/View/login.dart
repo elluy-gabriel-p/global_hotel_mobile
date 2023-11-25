@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ugdlayout2/View/register.dart';
 import 'package:ugdlayout2/View/home.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:ugdlayout2/View/user/profile/profile.dart';
 import 'package:ugdlayout2/component/form_component.dart';
 import 'package:ugdlayout2/database/sql_helper_user.dart';
 import 'package:ugdlayout2/theme_model.dart';
@@ -28,6 +29,7 @@ class _LoginViewState extends State<LoginView> {
 
   Future<void> setUserData(userVelue) async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setInt('userId', userVelue.id);
     pref.setString('username', userVelue.username);
     pref.setString('email', userVelue.email);
     pref.setString('password', userVelue.password);
@@ -126,6 +128,21 @@ class _LoginViewState extends State<LoginView> {
                           ),
 
                           SizedBox(height: 20),
+
+                          // Add the "Forgot Password" button
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: TextButton(
+                              onPressed: () {
+                                // Navigate to the Forgot Password screen
+                                // Navigator.push(context, MaterialPageRoute(builder: (context) => ForgotPasswordScreen()));
+                              },
+                              child: Text(
+                                'Forgot Password?',
+                                style: TextStyle(color: Colors.blue),
+                              ),
+                            ),
+                          ),
 
                           // Login Button
                           ElevatedButton(

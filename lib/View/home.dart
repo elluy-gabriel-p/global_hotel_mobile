@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ugdlayout2/View/ugdAPI2/kamarPage.dart';
 import 'package:ugdlayout2/View/view_list.dart';
 import 'package:ugdlayout2/View/view_grid.dart';
 import 'package:ugdlayout2/View/kamar_page.dart';
@@ -20,7 +21,7 @@ class _HomeViewState extends State<HomeView> {
     });
   }
 
-  static const List<Widget> _widgedOptions = <Widget>[
+  static  List<Widget> _widgedOptions = <Widget>[
     //*index 0
     ListAnggotaView(),
 
@@ -28,7 +29,8 @@ class _HomeViewState extends State<HomeView> {
     ListGrid(),
 
     //*index 2
-    KamarPage(title: 'SQFLITE'),
+    // KamarPage(title: 'SQFLITE'),
+    KamarPage2(),
 
     //*index 3
     ProfilePage(),
