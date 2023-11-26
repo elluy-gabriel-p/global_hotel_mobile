@@ -1,17 +1,18 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:ugdlayout2/View/pdf_view.dart';
 import 'package:ugdlayout2/database/sql_helper_kamar.dart';
 import 'package:ugdlayout2/entity/kamar.dart';
-import 'package:ugdlayout2/View/user/profile/profile.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:ugdlayout2/database/kamar_Database.dart';
+import 'dart:typed_data';
+import 'dart:io';
+import 'package:uuid/uuid.dart';
 
 class KamarPage extends StatefulWidget {
-  const KamarPage({Key? key, required this.title, this.dataImage})
-      : super(key: key);
+  const KamarPage({super.key, required this.title});
 
   final String title;
-  final Uint8List? dataImage; // Ensure this line is present
 
   @override
   State<KamarPage> createState() => _KamarPageState();
@@ -19,6 +20,12 @@ class KamarPage extends StatefulWidget {
 
 class _KamarPageState extends State<KamarPage> {
   List<Map<String, dynamic>> kamar = [];
+  String tipe = "";
+  int harga = 0;
+  int kapasitas = 0;
+  String status = "";
+  String id = Uuid().v1();
+  Uint8List? roomImage;
 
   @override
   void initState() {
@@ -35,8 +42,6 @@ class _KamarPageState extends State<KamarPage> {
 
   @override
   Widget build(BuildContext context) {
-    Uint8List? image = widget.dataImage; // Ensure this line is present
-
     return Scaffold(
       appBar: AppBar(
         title: Text("KAMAR"),
@@ -47,9 +52,8 @@ class _KamarPageState extends State<KamarPage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => KamarPage(
-                    title: 'KAMAR',
-                    dataImage: imageProfile, // Now imageProfile is accessible
+                  builder: (context) => InputKamarDetailsPage(
+                    title: 'INPUT KAMAR',
                   ),
                 ),
               ).then((_) => refresh());
@@ -61,14 +65,27 @@ class _KamarPageState extends State<KamarPage> {
         itemCount: kamar.length,
         itemBuilder: (context, index) {
           return Slidable(
-            child: ListTile(
-              title: Text(kamar[index]['tipe']),
-              subtitle: Text(
-                "${kamar[index]['harga']} ${kamar[index]['kapasitas']} ${kamar[index]['status']}",
-              ),
-            ),
-            actionPane: SlidableDrawerActionPane(),
+            actionPane: const SlidableDrawerActionPane(),
             secondaryActions: [
+              IconSlideAction(
+                caption: 'PDF',
+                color: Colors.deepOrange[700],
+                icon: Icons.insert_drive_file,
+                onTap: () async {
+                  tipe = kamar[index]['tipe'];
+                  harga = kamar[index]['harga'];
+                  kapasitas = kamar[index]['kapasitas'];
+                  status = kamar[index]['status'];
+                  roomImage = kamar[index]['roomImage'];
+
+                  // Continue with your existing code
+                  setState(() {
+                    const uuid = Uuid();
+                    id = uuid.v1();
+                  });
+                  createPdf(tipe, harga, kapasitas, id, status, roomImage, context);
+                },
+              ),
               IconSlideAction(
                 caption: 'Update',
                 color: Colors.blue,
@@ -84,6 +101,7 @@ class _KamarPageState extends State<KamarPage> {
                         harga: kamar[index]['harga'],
                         kapasitas: kamar[index]['kapasitas'],
                         status: kamar[index]['status'],
+                        roomImage: kamar[index]['roomImage'],
                       ),
                     ),
                   ).then((_) => refresh());
@@ -97,48 +115,84 @@ class _KamarPageState extends State<KamarPage> {
                   await deleteKamar(kamar[index]['id']);
                 },
               ),
-              IconSlideAction(
-                caption: 'Detail',
-                color: Colors.green,
-                icon: Icons.list,
-                onTap: () {
-                  if (image == null ||
-                      kamar[index]['tipe'].isEmpty ||
-                      kamar[index]['harga'].isEmpty ||
-                      kamar[index]['kapasitas'].isEmpty ||
-                      kamar[index]['status'].isEmpty) {
-                    showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: const Text('Warning'),
-                        content: const Text('Please fill in all the fields.'),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.pop(context),
-                            child: const Text('OK'),
-                          ),
-                        ],
-                      ),
-                    );
-                  } else {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => InputKamarDetailsPage(
-                          title: 'Detail Kamar',
-                          dataImage: widget.dataImage,
-                          id: kamar[index]['id'],
-                          tipe: kamar[index]['tipe'],
-                          harga: kamar[index]['harga'],
-                          kapasitas: kamar[index]['kapasitas'],
-                          status: kamar[index]['status'],
+            ],
+            child: ListTile(
+              leading: kamar[index]['roomImage'] != null
+                  ? Image.memory(
+                      kamar[index]['roomImage'],
+                      height: 50,
+                      width: 50,
+                      fit: BoxFit.cover,
+                    )
+                  : Container(
+                      width: 50, height: 50), // Customize container size
+              title: Text(kamar[index]['tipe']),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        "Harga",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                    );
-                  }
-                },
+                      SizedBox(width: 50), // Sesuaikan lebar sesuai kebutuhan
+                      Expanded(
+                        child: Text(
+                          ": Rp. ${kamar[index]['harga']}",
+                          style: TextStyle(
+                            fontSize: 16, // Sesuaikan ukuran sesuai kebutuhan
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        "Kapasitas",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(width: 22), // Sesuaikan lebar sesuai kebutuhan
+                      Expanded(
+                        child: Text(
+                          ": ${kamar[index]['kapasitas']}",
+                          style: TextStyle(
+                            fontSize: 16, // Sesuaikan ukuran sesuai kebutuhan
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        "Status",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(width: 48), // Sesuaikan lebar sesuai kebutuhan
+                      Expanded(
+                        child: Text(
+                          ": ${kamar[index]['status']}",
+                          style: TextStyle(
+                            fontSize: 16, // Sesuaikan ukuran sesuai kebutuhan
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-            ],
+            ),
           );
         },
       ),
@@ -160,12 +214,14 @@ class InputKamarDetailsPage extends StatefulWidget {
     this.harga,
     this.kapasitas,
     this.status,
+    this.roomImage,
   }) : super(key: key);
 
   final String title;
   final int? id;
   final String? tipe, status;
   final int? harga, kapasitas;
+  final Uint8List? roomImage;
 
   @override
   State<InputKamarDetailsPage> createState() => _InputKamarDetailsPageState();
@@ -177,6 +233,8 @@ class _InputKamarDetailsPageState extends State<InputKamarDetailsPage> {
   TextEditingController controllerKapasitas = TextEditingController();
   TextEditingController controllerStatus = TextEditingController();
 
+  Uint8List? _mutableRoomImage;
+
   @override
   void initState() {
     super.initState();
@@ -185,7 +243,78 @@ class _InputKamarDetailsPageState extends State<InputKamarDetailsPage> {
       controllerHarga.text = widget.harga.toString();
       controllerKapasitas.text = widget.kapasitas.toString();
       controllerStatus.text = widget.status!;
+      _mutableRoomImage = widget.roomImage ?? Uint8List(0);
     }
+  }
+
+  Future<void> _pickImageFromGallery() async {
+    final pickedImage = await ImagePicker()
+        .pickImage(source: ImageSource.gallery, imageQuality: 25);
+
+    if (pickedImage == null) return;
+    final imageFile = File(pickedImage.path);
+    final imageBytes = await imageFile.readAsBytes();
+
+    setState(() {
+      _mutableRoomImage = imageBytes;
+    });
+  }
+
+  Future<void> _pickImageFromCamera() async {
+    final pickedImage = await ImagePicker()
+        .pickImage(source: ImageSource.camera, imageQuality: 25);
+
+    if (pickedImage == null) return;
+    final imageFile = File(pickedImage.path);
+    final imageBytes = await imageFile.readAsBytes();
+
+    setState(() {
+      _mutableRoomImage = imageBytes;
+    });
+  }
+
+  Future<void> _showImagePickerModal() async {
+    showModalBottomSheet(
+      context: context,
+      builder: (builder) {
+        return Container(
+          height: 100.0,
+          width: MediaQuery.of(context).size.width,
+          margin: EdgeInsets.symmetric(
+            horizontal: 20,
+            vertical: 20,
+          ),
+          child: Column(
+            children: <Widget>[
+              Text(
+                "Choose Room Image",
+                style: TextStyle(
+                  fontSize: 20.0,
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  ElevatedButton.icon(
+                    onPressed: _pickImageFromCamera,
+                    icon: Icon(Icons.camera),
+                    label: Text("Camera"),
+                  ),
+                  ElevatedButton.icon(
+                    onPressed: _pickImageFromGallery,
+                    icon: Icon(Icons.image),
+                    label: Text('Gallery'),
+                  ),
+                ],
+              )
+            ],
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -197,6 +326,14 @@ class _InputKamarDetailsPageState extends State<InputKamarDetailsPage> {
       body: ListView(
         padding: EdgeInsets.all(16),
         children: <Widget>[
+          // Image picker button
+          ElevatedButton.icon(
+            onPressed: _showImagePickerModal,
+            icon: Icon(Icons.add_a_photo),
+            label: Text("Choose Room Image"),
+          ),
+          SizedBox(height: 16),
+
           TextField(
             controller: controllerTipe,
             decoration: const InputDecoration(
@@ -229,6 +366,14 @@ class _InputKamarDetailsPageState extends State<InputKamarDetailsPage> {
             ),
           ),
           SizedBox(height: 54),
+          // Display the picked image if available
+          if (_mutableRoomImage != null)
+            Image.memory(
+              _mutableRoomImage!,
+              height: 100,
+              width: 100,
+            ),
+          SizedBox(height: 16),
           ElevatedButton(
             child: Text('Save'),
             onPressed: () async {
@@ -239,7 +384,7 @@ class _InputKamarDetailsPageState extends State<InputKamarDetailsPage> {
               }
               Navigator.pop(context);
             },
-          )
+          ),
         ],
       ),
     );
@@ -251,7 +396,7 @@ class _InputKamarDetailsPageState extends State<InputKamarDetailsPage> {
     final kapasitas = int.tryParse(controllerKapasitas.text) ?? 0;
     final status = controllerStatus.text;
 
-    await SQLHelper.addKamar(tipe, harga, kapasitas, status);
+    await SQLHelper.addKamar(tipe, harga, kapasitas, status, _mutableRoomImage);
   }
 
   Future<void> editKamar(int id) async {
@@ -260,6 +405,7 @@ class _InputKamarDetailsPageState extends State<InputKamarDetailsPage> {
     final kapasitas = int.tryParse(controllerKapasitas.text) ?? 0;
     final status = controllerStatus.text;
 
-    await SQLHelper.editKamar(id, tipe, harga, kapasitas, status);
+    await SQLHelper.editKamar(
+        id, tipe, harga, kapasitas, status, _mutableRoomImage);
   }
 }

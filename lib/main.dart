@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:ugdlayout2/theme_model.dart';
 import 'package:ugdlayout2/View/login.dart';
 import 'package:provider/provider.dart';
@@ -19,8 +20,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: MyBrightnessControlApp(),
+    return ChangeNotifierProvider(
+      create: (_) => ThemeModel(),
+      child: ResponsiveSizer(builder: (context, orientation, screenType) {
+        return MaterialApp(
+          home: MyBrightnessControlApp(),
+        );
+      }),
     );
   }
 }

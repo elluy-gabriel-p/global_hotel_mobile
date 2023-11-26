@@ -3,11 +3,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ugdlayout2/View/register.dart';
 import 'package:ugdlayout2/View/home.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:ugdlayout2/View/user/profile/profile.dart';
 import 'package:ugdlayout2/component/form_component.dart';
 import 'package:ugdlayout2/database/sql_helper_user.dart';
 import 'package:ugdlayout2/theme_model.dart';
 import 'package:ugdlayout2/entity/user.dart';
 import 'package:provider/provider.dart';
+import 'package:ugdlayout2/database/login_database.dart';
 
 class LoginView extends StatefulWidget {
   final Map? data;
@@ -27,6 +29,7 @@ class _LoginViewState extends State<LoginView> {
 
   Future<void> setUserData(userVelue) async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setInt('userId', userVelue.id);
     pref.setString('username', userVelue.username);
     pref.setString('email', userVelue.email);
     pref.setString('password', userVelue.password);
@@ -126,13 +129,32 @@ class _LoginViewState extends State<LoginView> {
 
                           SizedBox(height: 20),
 
+                          // Add the "Forgot Password" button
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: TextButton(
+                              onPressed: () {
+                                // Navigate to the Forgot Password screen
+                                // Navigator.push(context, MaterialPageRoute(builder: (context) => ForgotPasswordScreen()));
+                              },
+                              child: Text(
+                                'Forgot Password?',
+                                style: TextStyle(color: Colors.blue),
+                              ),
+                            ),
+                          ),
+
                           // Login Button
                           ElevatedButton(
                             onPressed: () async {
-                              User? logUser = await SQLHelper.forLogin(
-                                usernameController.text,
-                                passwordController.text,
-                              );
+                              // User? logUser = await SQLHelper.forLogin(
+                              //   usernameController.text,
+                              //   passwordController.text,
+                              // );
+                              User? logUser = await LoginClient.login(usernameController.text,
+                                passwordController.text);
+
+                              setUserData(logUser);
 
                               if (_formKey.currentState!.validate()) {
                                 if (logUser != null) {
@@ -145,7 +167,7 @@ class _LoginViewState extends State<LoginView> {
                                     textColor: Colors.white,
                                     fontSize: 16.0,
                                   );
-                                  setUserData(logUser);
+
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -166,8 +188,7 @@ class _LoginViewState extends State<LoginView> {
 
                                   showDialog(
                                     context: context,
-                                    builder: (BuildContext context) =>
-                                        AlertDialog(
+                                    builder: (_) => AlertDialog(
                                       title: const Text('Password Salah'),
                                       content: TextButton(
                                         onPressed: () => pushRegister(context),
@@ -176,7 +197,7 @@ class _LoginViewState extends State<LoginView> {
                                       actions: <Widget>[
                                         TextButton(
                                           onPressed: () =>
-                                              Navigator.of(context).pop(),
+                                              Navigator.pop(context, 'Cancel'),
                                           child: const Text('Cancel'),
                                         ),
                                         TextButton(
@@ -222,6 +243,10 @@ class _LoginViewState extends State<LoginView> {
                               child: const Text('Belum punya akun ?'),
                             ),
                           ),
+                          // ElevatedButton(onPressed: () async {
+                          //   User data = await LoginClient.login('riksi', '12345678');
+                          //   print(data.username);
+                          // }, child: Container())
                         ],
                       ),
                     ),

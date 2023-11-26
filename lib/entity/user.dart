@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ffi';
 import 'dart:typed_data';
 
@@ -16,9 +17,10 @@ class User {
       this.borndate,
       this.dataImage});
 
+  String toRawJson() => json.encode(toMap());
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
+      'id': id.toString(),
       'username': username,
       'email': email,
       'password': password,

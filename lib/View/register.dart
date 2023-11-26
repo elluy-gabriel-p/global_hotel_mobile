@@ -4,10 +4,12 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:ugdlayout2/component/passForm.dart';
 import 'package:ugdlayout2/database/sql_helper_user.dart';
-import 'package:ugdlayout2/view/login.dart';
+import 'package:ugdlayout2/View/login.dart';
 import 'package:ugdlayout2/component/form_component.dart';
+import 'package:ugdlayout2/entity/user.dart';
 import 'package:ugdlayout2/theme_model.dart';
 import 'package:provider/provider.dart';
+import 'package:ugdlayout2/database/login_database.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView(
@@ -51,7 +53,7 @@ class _RegisterViewState extends State<RegisterView> {
       String title, String message, Map<String, dynamic> FormData) {
     showDialog(
       context: context,
-      builder: (BuildContext contextDilaog) {
+      builder: (BuildContext context) {
         return AlertDialog(
           title: Text(title),
           content: Text(message),
@@ -62,7 +64,6 @@ class _RegisterViewState extends State<RegisterView> {
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (_) => LoginView(data: FormData)));
-                Navigator.of(contextDilaog).pop();
               },
               child: Text('OK'),
             ),
@@ -324,6 +325,11 @@ class _RegisterViewState extends State<RegisterView> {
                                     FormData['email'] = emailController.text;
                                     FormData['notelp'] = notelpController.text;
                                     FormData['borndate'] = dateinput.text;
+
+                                    User user= User(username: usernameController.text,email: emailController.text ,password: passwordController.text, notelp: notelpController.text, borndate: dateinput.text);
+                                    print(user.username);
+                                    LoginClient.create(user);
+
                                     if (registrationSuccessful) {
                                       _showAlertDialog('Success',
                                           'Registrasi berhasil!', FormData);
@@ -340,8 +346,11 @@ class _RegisterViewState extends State<RegisterView> {
                                       if (widget.id == null) {
                                         await addUser();
                                       }
-                                      // Navigator.pop(context);
                                     }
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (_) => LoginView()));
                                   } else {
                                     Map<String, dynamic> FormData = {};
                                     _showAlertDialog(

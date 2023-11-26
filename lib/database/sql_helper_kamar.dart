@@ -1,5 +1,5 @@
 import 'package:sqflite/sqflite.dart' as sql;
-
+import 'dart:typed_data';
 class SQLHelper {
   //create db
   static Future<void> createTable(sql.Database database) async {
@@ -9,9 +9,19 @@ class SQLHelper {
         tipe TEXT,
         harga INTEGER,
         kapasitas INTEGER,
-        status TEXT
+        status TEXT,
+        roomImage BLOB
         )
     """);
+  }
+
+  //upload room image
+  static Future<int> updateRoomImages(
+      String tipe, Uint8List roomImage) async {
+    final db = await SQLHelper.db();
+    final data = {'roomImage': roomImage};
+    return db
+        .update('kamar', data, where: 'tipe = ?', whereArgs: [tipe]);
   }
 
   //call db
@@ -24,13 +34,19 @@ class SQLHelper {
 
   // insert kamar
   static Future<int> addKamar(
-      String tipe, int harga, int kapasitas, String status) async {
+    String tipe,
+    int harga,
+    int kapasitas,
+    String status,
+    Uint8List? roomImage,
+  ) async {
     final db = await SQLHelper.db();
     final data = {
       'tipe': tipe,
       'harga': harga,
       'kapasitas': kapasitas,
       'status': status,
+      'roomImage': roomImage, // Add this line to include the room image
     };
     return await db.insert('kamar', data);
   }
@@ -43,16 +59,18 @@ class SQLHelper {
 
   //update kamar
   static Future<int> editKamar(
-      int id, String tipe, int harga, int kapasitas, String status) async {
+    int id, String tipe, int harga, int kapasitas, String status, Uint8List? roomImage) async {
     final db = await SQLHelper.db();
     final data = {
       'tipe': tipe,
       'harga': harga,
       'kapasitas': kapasitas,
       'status': status,
+      'roomImage': roomImage,
     };
-    return await db.update('kamar', data, where: 'id = $id');
+    return await db.update('kamar', data, where: 'id = ?', whereArgs: [id]);
   }
+
 
   //delete kamar
   static Future<int> deleteKamar(int id) async {

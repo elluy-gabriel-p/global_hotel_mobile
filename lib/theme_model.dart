@@ -13,7 +13,7 @@ class ThemeModel extends ChangeNotifier {
   }
 
   getPreferences() async {
-    _isDark = await _preferences.getTheme();
+    _isDark = await _preferences.getTheme() ?? false;
     notifyListeners();
   }
 
