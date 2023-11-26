@@ -5,13 +5,18 @@ import 'package:provider/provider.dart';
 import 'package:sensors/sensors.dart';
 import 'package:screen_brightness/screen_brightness.dart';
 import 'package:wakelock/wakelock.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart' as riverpod;
+
 import 'dart:async';
 
 void main() {
-  runApp(MyApp());
+  //aplikasi dibungkus ProviderScope agar bisa mengunakan riverpod
+  runApp(riverpod.ProviderScope(child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
