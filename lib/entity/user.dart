@@ -25,7 +25,8 @@ class User {
       'email': email,
       'password': password,
       'notelp': notelp,
-      'borndate': borndate
+      'borndate': borndate,
+      'dataImage': base64Encode(dataImage ?? Uint8List(0))
     };
   }
 
@@ -35,5 +36,6 @@ class User {
         email = temp['email'],
         password = temp['password'],
         notelp = temp['notelp'],
-        borndate = temp['borndate'];
+        borndate = temp['borndate'],
+        dataImage = base64Decode(temp['dataImage']);
 }

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:ugdlayout2/database/sql_helper_user.dart';
 import 'package:shared_preferences/shared_preferences.dart'; // Import shared_preferences.dart or the appropriate package for data storage.
 import 'package:ugdlayout2/View/login.dart';
+import 'package:ugdlayout2/database/login_database.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter/services.dart'; // Import the LoginClient
+import 'package:ugdlayout2/entity/user.dart';
+
+// ... (other imports)
 
 class EditProfilePage extends StatefulWidget {
   @override
@@ -19,6 +22,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   bool _isSecurePassword = true;
 
+  late User loggedInUser; // Store the logged-in user
+
   @override
   void initState() {
     super.initState();
@@ -26,21 +31,25 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   Future<void> loadUserData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    // Load the user's data and set it in the respective controllers.
-    String? username = prefs.getString('username');
-    String? email = prefs.getString('email');
-    String? password = prefs.getString('password');
-    String? noTelp = prefs.getString('noTelp');
-    String? date = prefs.getString('tanggalLahir');
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? loggedInUsername = prefs.getString('username');
 
-    setState(() {
-      usernameController.text = username ?? '';
-      emailController.text = email ?? '';
-      passwordController.text = password ?? '';
-      notelpController.text = noTelp != null ? noTelp.toString() : '';
-      dateController.text = date ?? '';
-    });
+      if (loggedInUsername == null) {
+        // If the user is not logged in, navigate to the login page
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => LoginView()),
+        );
+      } else {
+        // If the user is logged in, load the user data
+        loggedInUser = await LoginClient.find(loggedInUsername);
+        loadUserData();
+      }
+    } catch (e) {
+      print('Error checking login status: $e');
+      // Handle the error appropriately, e.g., show an error message to the user
+    }
   }
 
   @override
@@ -205,35 +214,22 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   Future<void> saveEditedData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    final username = usernameController.text;
-    final email = emailController.text;
-    final password = passwordController.text;
-    final notelp = notelpController.text;
-    final borndate = dateController.text;
+    try {
+      User user = User(
+        username: usernameController.text,
+        email: emailController.text,
+        password: passwordController.text,
+        notelp: notelpController.text,
+        borndate: dateController.text,
+      );
 
-    // Save the edited data to SharedPreferences.
-    await prefs.setString('username', username);
-    await prefs.setString('email', email);
-    await prefs.setString('password', password);
-    await prefs.setString('noTelp', notelp);
-    await prefs.setString('tanggalLahir', borndate);
+      await LoginClient.update(user);
 
-    // Update the SQLite database with the edited data.
-    final db = await SQLHelper.db();
-    await db.rawUpdate(
-      'UPDATE user SET username = ?, email = ?, password = ?, notelp = ?, borndate = ? WHERE id = ?',
-      [
-        username,
-        email,
-        password,
-        notelp,
-        borndate,
-        1
-      ], // Replace '1' with the actual user ID
-    );
-
-    // Return 'true' to indicate changes were made.
-    Navigator.pop(context, true);
+      // Return to the previous page after saving the data
+      Navigator.pop(context, true);
+    } catch (e) {
+      print('Error saving edited data: $e');
+      // Handle the error appropriately, e.g., show an error message to the user
+    }
   }
 }

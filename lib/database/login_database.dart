@@ -1,5 +1,7 @@
 import 'dart:ffi';
+import 'dart:typed_data';
 
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ugdlayout2/entity/user.dart';
 
 import 'dart:convert';
@@ -76,12 +78,57 @@ class LoginClient {
     try {
       var response = await post(Uri.http(url, "${endpoint}login"),
           body: {'username': username, 'password': password});
-      // print(response.body);
+
       if (response.statusCode != 200) throw Exception(response.reasonPhrase);
+
       final userData = json.decode(response.body)['user'];
       print(userData);
 
-      return User.fromMap(userData[0]);
+      User loggedInUser = User.fromMap(userData[0]);
+
+      // Store the user data locally, for example using shared preferences
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('username', loggedInUser.username!);
+      prefs.setString('email', loggedInUser.email!);
+      // Add other user data as needed
+
+      return loggedInUser;
+    } catch (e) {
+      return Future.error(e.toString());
+    }
+  }
+
+  static Future<Response> ResetPass(String username, String newPass) async {
+    try {
+      var response = await post(Uri.http(url, "/api/resetPassword"),
+          headers: {"Content-Type": "application/json"},
+          body: jsonEncode({"username": username, "password": newPass}));
+      if (response.statusCode != 200) throw Exception(response.reasonPhrase);
+      return response;
+    } catch (e) {
+      return Future.error(e.toString());
+    }
+  }
+
+  static Future<Response> updateProfileImages(
+      String username, Uint8List imageBytes) async {
+    try {
+      var response = await put(
+        Uri.http(url, '$endpoint/updateProfileImages/$username'),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: jsonEncode({
+          "username": username,
+          "profileImage": base64Encode(imageBytes),
+        }),
+      );
+
+      if (response.statusCode != 200) {
+        throw Exception(response.reasonPhrase);
+      }
+
+      return response;
     } catch (e) {
       return Future.error(e.toString());
     }

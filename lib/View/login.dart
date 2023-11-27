@@ -10,6 +10,7 @@ import 'package:ugdlayout2/theme_model.dart';
 import 'package:ugdlayout2/entity/user.dart';
 import 'package:provider/provider.dart';
 import 'package:ugdlayout2/database/login_database.dart';
+import 'package:ugdlayout2/View/forgot_password.dart';
 
 class LoginView extends StatefulWidget {
   final Map? data;
@@ -135,7 +136,11 @@ class _LoginViewState extends State<LoginView> {
                             child: TextButton(
                               onPressed: () {
                                 // Navigate to the Forgot Password screen
-                                // Navigator.push(context, MaterialPageRoute(builder: (context) => ForgotPasswordScreen()));
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            ForgetPasswordPage()));
                               },
                               child: Text(
                                 'Forgot Password?',
@@ -151,8 +156,9 @@ class _LoginViewState extends State<LoginView> {
                               //   usernameController.text,
                               //   passwordController.text,
                               // );
-                              User? logUser = await LoginClient.login(usernameController.text,
-                                passwordController.text);
+                              User? logUser = await LoginClient.login(
+                                  usernameController.text,
+                                  passwordController.text);
 
                               setUserData(logUser);
 
