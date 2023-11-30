@@ -5,38 +5,33 @@ import 'package:ugdlayout2/View/view_grid.dart';
 import 'package:ugdlayout2/View/kamar_page.dart';
 import 'package:ugdlayout2/View/user/profile/profile.dart';
 import 'package:ugdlayout2/View/user/my_booking/on_going.dart';
+import 'package:ugdlayout2/View/ugdAPI2/kamarPage.dart';
+import 'package:ugdlayout2/View/home.dart';
 
-class HomeView extends StatefulWidget {
-  const HomeView({super.key});
+class HomeFix extends StatefulWidget {
+  const HomeFix({super.key});
 
   @override
-  State<HomeView> createState() => _HomeViewState();
+  State<HomeFix> createState() => _HomeViewState();
 }
 
-class _HomeViewState extends State<HomeView> {
-  int _selectedIndex = 0;
+class _HomeViewState extends State<HomeFix> {
+  int _selectedIndex = 1;
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
 
-  static  List<Widget> _widgedOptions = <Widget>[
-    //*index 0
-    ListAnggotaView(),
-
+  static List<Widget> _widgedOptions = <Widget>[
     //*index 1
-    ListGrid(),
+    KamarPage2(),
 
     //*index 2
-    // KamarPage(title: 'SQFLITE'),
-    KamarPage2(),
+    OnGoing(),
 
     //*index 3
     ProfilePage(),
-
-    //*index 4
-    OnGoing(),
   ];
 
   @override
@@ -46,23 +41,16 @@ class _HomeViewState extends State<HomeView> {
         items: const [
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.list,
+              Icons.description,
             ),
-            label: 'List',
+            label: 'Kamar',
             backgroundColor: Colors.red,
           ),
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.grid_3x3,
+              Icons.home,
             ),
-            label: 'Grid',
-            backgroundColor: Colors.green,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.bedroom_child_rounded,
-            ),
-            label: 'Kamar',
+            label: 'Home',
             backgroundColor: Colors.purple,
           ),
           BottomNavigationBarItem(
@@ -71,13 +59,6 @@ class _HomeViewState extends State<HomeView> {
             ),
             label: 'Profile',
             backgroundColor: Colors.pink,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.bookmark,
-            ),
-            label: 'My Booking',
-            backgroundColor: Colors.yellow,
           ),
         ],
         currentIndex: _selectedIndex,

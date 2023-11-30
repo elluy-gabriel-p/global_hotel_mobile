@@ -1,30 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ugdlayout2/View/register.dart';
-import 'package:ugdlayout2/View/Tubes/homeFix.dart';
-import 'package:ugdlayout2/View/home.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:ugdlayout2/View/user/profile/profile.dart';
-import 'package:ugdlayout2/component/form_component.dart';
-import 'package:ugdlayout2/database/sql_helper_user.dart';
-import 'package:ugdlayout2/theme_model.dart';
-import 'package:ugdlayout2/entity/user.dart';
-import 'package:provider/provider.dart';
 import 'package:ugdlayout2/database/login_database.dart';
-import 'package:ugdlayout2/View/forgotPass.dart';
+import 'package:ugdlayout2/entity/user.dart';
+import 'package:ugdlayout2/View/home.dart';
+import 'package:ugdlayout2/View/Tubes/homeFix.dart';
+import 'package:ugdlayout2/View/register.dart';
+import 'package:ugdlayout2/theme_model.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ugdlayout2/View/login.dart';
 
-class LoginView extends StatefulWidget {
+class ForgotPassView extends StatefulWidget {
   final Map? data;
-  const LoginView({super.key, this.data});
+
+  const ForgotPassView({Key? key, this.data}) : super(key: key);
 
   @override
-  State<LoginView> createState() => _LoginViewState();
+  _ForgotPassViewState createState() => _ForgotPassViewState();
 }
 
-User user = User();
-
-class _LoginViewState extends State<LoginView> {
-  TextEditingController usernameController = TextEditingController();
+class _ForgotPassViewState extends State<ForgotPassView> {
+  TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _isSecurePassword = true;
@@ -86,14 +82,14 @@ class _LoginViewState extends State<LoginView> {
                         children: [
                           // Username Text Field
                           TextFormField(
-                            controller: usernameController,
+                            controller: emailController,
                             decoration: InputDecoration(
-                              labelText: "Username",
-                              prefixIcon: Icon(Icons.person),
+                              labelText: "Email",
+                              prefixIcon: Icon(Icons.email),
                             ),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return "Username tidak boleh kosong";
+                                return "Email tidak boleh kosong";
                               }
                               return null;
                             },
@@ -106,7 +102,7 @@ class _LoginViewState extends State<LoginView> {
                             controller: passwordController,
                             obscureText: _isSecurePassword,
                             decoration: InputDecoration(
-                              labelText: "Password",
+                              labelText: "New Password",
                               prefixIcon: Icon(Icons.lock),
                               suffixIcon: IconButton(
                                 onPressed: () {
@@ -130,90 +126,75 @@ class _LoginViewState extends State<LoginView> {
                           ),
 
                           SizedBox(height: 20),
-
-                          // Add the "Forgot Password" button
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: TextButton(
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            ForgotPassView()));
-                              },
-                              child: Text(
-                                'Forgot Password?',
-                                style: TextStyle(color: Colors.blue),
-                              ),
-                            ),
-                          ),
-
                           // Login Button
                           ElevatedButton(
                             onPressed: () async {
-                              // User? logUser = await SQLHelper.forLogin(
-                              //   usernameController.text,
-                              //   passwordController.text,
-                              // );
-                              User? logUser = await LoginClient.login(
-                                  usernameController.text,
-                                  passwordController.text);
-
-                              setUserData(logUser);
-
                               if (_formKey.currentState!.validate()) {
-                                if (logUser != null) {
-                                  Fluttertoast.showToast(
-                                    msg: "Login Success",
-                                    toastLength: Toast.LENGTH_SHORT,
-                                    gravity: ToastGravity.CENTER,
-                                    timeInSecForIosWeb: 1,
-                                    backgroundColor: Colors.lightGreenAccent,
-                                    textColor: Colors.white,
-                                    fontSize: 16.0,
+                                try {
+                                  User? fPass =
+                                      await LoginClient.updatePassword(
+                                    emailController.text,
+                                    passwordController.text,
                                   );
 
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-// LEMPAR  DATA USER YANG LOGIN KE HOME VIEW (kalau mau diubah disini)
-                                      builder: (_) => const HomeFix(),
-                                    ),
-                                  );
-                                } else {
-                                  Fluttertoast.showToast(
-                                    msg: "Login Failed",
-                                    toastLength: Toast.LENGTH_SHORT,
-                                    gravity: ToastGravity.CENTER,
-                                    timeInSecForIosWeb: 1,
-                                    backgroundColor: Colors.red,
-                                    textColor: Colors.white,
-                                    fontSize: 16.0,
-                                  );
+                                  if (fPass != null) {
+                                    Fluttertoast.showToast(
+                                      msg: "Update Pass Success",
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.CENTER,
+                                      timeInSecForIosWeb: 1,
+                                      backgroundColor: Colors.lightGreenAccent,
+                                      textColor: Colors.white,
+                                      fontSize: 16.0,
+                                    );
 
-                                  showDialog(
-                                    context: context,
-                                    builder: (_) => AlertDialog(
-                                      title: const Text('Password Salah'),
-                                      content: TextButton(
-                                        onPressed: () => pushRegister(context),
-                                        child: const Text('Daftar Di sini !!'),
+                                    setUserData(fPass);
+
+                                    Navigator.pop(context);
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => LoginView(),
                                       ),
-                                      actions: <Widget>[
-                                        TextButton(
+                                    );
+                                  } else {
+                                    Fluttertoast.showToast(
+                                      msg: "Update Pass Failed",
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.CENTER,
+                                      timeInSecForIosWeb: 1,
+                                      backgroundColor: Colors.red,
+                                      textColor: Colors.white,
+                                      fontSize: 16.0,
+                                    );
+
+                                    showDialog(
+                                      context: context,
+                                      builder: (_) => AlertDialog(
+                                        title: const Text('Email Salah'),
+                                        content: TextButton(
                                           onPressed: () =>
-                                              Navigator.pop(context, 'Cancel'),
-                                          child: const Text('Cancel'),
+                                              pushRegister(context),
+                                          child:
+                                              const Text('Daftar Di sini !!'),
                                         ),
-                                        TextButton(
-                                          onPressed: () =>
-                                              Navigator.pop(context, 'OK'),
-                                          child: const Text('OK'),
-                                        ),
-                                      ],
-                                    ),
-                                  );
+                                        actions: <Widget>[
+                                          TextButton(
+                                            onPressed: () => Navigator.pop(
+                                                context, 'Cancel'),
+                                            child: const Text('Cancel'),
+                                          ),
+                                          TextButton(
+                                            onPressed: () =>
+                                                Navigator.pop(context, 'OK'),
+                                            child: const Text('OK'),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  }
+                                } catch (e) {
+                                  print('Error updating password: $e');
                                 }
                               }
                             },
@@ -222,7 +203,7 @@ class _LoginViewState extends State<LoginView> {
                                   const Color.fromARGB(255, 65, 64, 64)),
                             ),
                             child: const Text(
-                              'Login',
+                              'Update Password',
                               style: TextStyle(color: Colors.white),
                             ),
                           ),
@@ -237,22 +218,19 @@ class _LoginViewState extends State<LoginView> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (_) => RegisterView(
-                                        id: null,
-                                        username: null,
-                                        email: null,
-                                        password: null,
-                                        notelp: null,
-                                        borndate: null),
+                                      id: null,
+                                      username: null,
+                                      email: null,
+                                      password: null,
+                                      notelp: null,
+                                      borndate: null,
+                                    ),
                                   ),
                                 );
                               },
                               child: const Text('Belum punya akun ?'),
                             ),
                           ),
-                          // ElevatedButton(onPressed: () async {
-                          //   User data = await LoginClient.login('riksi', '12345678');
-                          //   print(data.username);
-                          // }, child: Container())
                         ],
                       ),
                     ),
@@ -271,17 +249,14 @@ class _LoginViewState extends State<LoginView> {
       context,
       MaterialPageRoute(
         builder: (_) => const RegisterView(
-            id: null,
-            username: null,
-            password: null,
-            email: null,
-            notelp: null,
-            borndate: null),
+          id: null,
+          username: null,
+          password: null,
+          email: null,
+          notelp: null,
+          borndate: null,
+        ),
       ),
     );
-  }
-
-  Future<void> forLogin() async {
-    await SQLHelper.forLogin(usernameController.text, passwordController.text);
   }
 }

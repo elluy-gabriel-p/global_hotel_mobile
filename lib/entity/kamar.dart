@@ -1,8 +1,31 @@
+import 'dart:convert';
+
 class Kamar {
-  final int? id;
+  int id, harga, kapasitas;
+  String tipe, status;
 
-  String? tipe, status;
-  int? harga, kapasitas;
+  Kamar(
+      {required this.id,
+      required this.tipe,
+      required this.harga,
+      required this.kapasitas,
+      required this.status});
 
-  Kamar({this.id, this.tipe, this.harga, this.kapasitas, this.status});
+  factory Kamar.fromRawJson(String str) => Kamar.fromRawJson(json.decode(str));
+  factory Kamar.fromJson(Map<String, dynamic> json) => Kamar(
+        id: json["id"],
+        tipe: json["tipe"],
+        harga: json["harga"],
+        kapasitas: json["kapasitas"],
+        status: json["status"],
+      );
+
+  String toRawJson() => json.encode(toJson());
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "tipe": tipe,
+        "harga": harga,
+        "kapasitas": kapasitas,
+        "status": status,
+      };
 }
