@@ -32,3 +32,8 @@ Membuat aplikasi booking hotel sederhana yang berbasis di Android menggunakan ba
 ## Modul API
 - Iqbal : Login, Register
 - Tiffany : Tampil Profile, Update Profile, Forget Password, CRUD
+
+## Modul  Widget Testing
+- Michael : Register testing, Login testing
+- Bona : Login Testing
+- Elluy : CRUD Testing
