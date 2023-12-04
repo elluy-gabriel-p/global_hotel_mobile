@@ -34,6 +34,6 @@ Membuat aplikasi booking hotel sederhana yang berbasis di Android menggunakan ba
 - Tiffany : Tampil Profile, Update Profile, Forget Password, CRUD
 
 ## Modul  Widget Testing
-- Michael : Register testing, Login testing
-- Bona : Login Testing
-- Elluy : CRUD Testing
+- Michael (210711056) : Register testing, Login testing
+- Bona (210711088) : Login Testing
+- Elluy (210711306) : CRUD Testing
