@@ -26,7 +26,3 @@ Membuat aplikasi booking hotel sederhana yang berbasis di Android menggunakan ba
 - Tiffany : PDF_View, Kamar_Page(add image picker, uuid, intl, buttoncreatepdf), Preview Screen
 - Michael Kevin Kimyuwono (210711056) : resizer, intl, memperbaiki pdf_view, preview screen
 - Bonaventura Dimas Dyan Bagaskara (210711088) : uuid, memperbaiki pemanggilan gambar dari pdf_view ke preview
-
-##Modul API
-- Iqbal : Login Register
-- Tiffany : Tampil Profile, Update Profile, Forget Password, CRUD

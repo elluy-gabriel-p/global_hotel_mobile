@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 import 'package:ugdlayout2/entity/user.dart';
 
@@ -60,12 +59,12 @@ class LoginClient {
 
   //mengambil data user sesuai ID
   static Future<Response> update(User user) async {
-    print('User ID: ${user.id}');
+    print('User ID: ${user.toRawJson()}');
     try {
       var response = await put(Uri.http(url, '/api/user/${user.id}'),
           headers: {'Content-Type': 'application/json'},
           body: user.toRawJson());
-
+      print('Respon: ${response.body}');
       if (response.statusCode != 200) throw Exception(response.reasonPhrase);
       print('Update Data Success');
       return response;
@@ -79,9 +78,11 @@ class LoginClient {
 
   static Future<User> login(String username, String password) async {
     try {
+      print('masuk 3');
       var response = await post(Uri.http(url, "${endpoint}login"),
           body: {'username': username, 'password': password});
       // print(response.body);
+      print('masuk 4');
       if (response.statusCode != 200) throw Exception(response.reasonPhrase);
       final userData = json.decode(response.body)['user'];
       print(userData);
@@ -94,7 +95,7 @@ class LoginClient {
 
   static Future<User> updatePassword(String email, String newPassword) async {
     try {
-      var response = await put(
+      var response = await post(
         Uri.http(url, "/api/updatePass"),
         body: {
           'email': email,

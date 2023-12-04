@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:ugdlayout2/View/register.dart';
+import 'package:ugdlayout2/View/widgetTesting/login.dart';
+import 'package:ugdlayout2/View/widgetTesting/register.dart';
 import 'package:ugdlayout2/theme_model.dart';
 import 'package:ugdlayout2/View/login.dart';
 import 'package:provider/provider.dart';
@@ -96,7 +99,7 @@ class _MyBrightnessControlAppState extends State<MyBrightnessControlApp> {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             theme: themeNotifier.isDark ? ThemeData.dark() : ThemeData.light(),
-            home: LoginView(),
+            home: Register(),
           );
         });
       },

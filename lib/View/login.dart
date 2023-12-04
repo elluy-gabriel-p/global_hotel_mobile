@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:printing/printing.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ugdlayout2/View/register.dart';
 import 'package:ugdlayout2/View/Tubes/homeFix.dart';
@@ -13,17 +14,16 @@ import 'package:provider/provider.dart';
 import 'package:ugdlayout2/database/login_database.dart';
 import 'package:ugdlayout2/View/forgotPass.dart';
 
-class LoginView extends StatefulWidget {
-  final Map? data;
-  const LoginView({super.key, this.data});
+class LoginView extends StatefulWidget {  final Map? data;
+  LoginView({super.key, this.data });
 
   @override
-  State<LoginView> createState() => _LoginViewState();
+  State<LoginView> createState() => LoginViewState();
 }
 
 User user = User();
 
-class _LoginViewState extends State<LoginView> {
+class LoginViewState extends State<LoginView> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
@@ -86,6 +86,7 @@ class _LoginViewState extends State<LoginView> {
                         children: [
                           // Username Text Field
                           TextFormField(
+                            key: Key('userField'),
                             controller: usernameController,
                             decoration: InputDecoration(
                               labelText: "Username",
@@ -103,6 +104,7 @@ class _LoginViewState extends State<LoginView> {
 
                           // Password Text Field
                           TextFormField(
+                            key: Key('passField'),
                             controller: passwordController,
                             obscureText: _isSecurePassword,
                             decoration: InputDecoration(
@@ -152,70 +154,11 @@ class _LoginViewState extends State<LoginView> {
                           // Login Button
                           ElevatedButton(
                             onPressed: () async {
+                                  prosesLogin(usernameController.text, passwordController.text);
                               // User? logUser = await SQLHelper.forLogin(
                               //   usernameController.text,
                               //   passwordController.text,
                               // );
-                              User? logUser = await LoginClient.login(
-                                  usernameController.text,
-                                  passwordController.text);
-
-                              setUserData(logUser);
-
-                              if (_formKey.currentState!.validate()) {
-                                if (logUser != null) {
-                                  Fluttertoast.showToast(
-                                    msg: "Login Success",
-                                    toastLength: Toast.LENGTH_SHORT,
-                                    gravity: ToastGravity.CENTER,
-                                    timeInSecForIosWeb: 1,
-                                    backgroundColor: Colors.lightGreenAccent,
-                                    textColor: Colors.white,
-                                    fontSize: 16.0,
-                                  );
-
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-// LEMPAR  DATA USER YANG LOGIN KE HOME VIEW (kalau mau diubah disini)
-                                      builder: (_) => const HomeFix(),
-                                    ),
-                                  );
-                                } else {
-                                  Fluttertoast.showToast(
-                                    msg: "Login Failed",
-                                    toastLength: Toast.LENGTH_SHORT,
-                                    gravity: ToastGravity.CENTER,
-                                    timeInSecForIosWeb: 1,
-                                    backgroundColor: Colors.red,
-                                    textColor: Colors.white,
-                                    fontSize: 16.0,
-                                  );
-
-                                  showDialog(
-                                    context: context,
-                                    builder: (_) => AlertDialog(
-                                      title: const Text('Password Salah'),
-                                      content: TextButton(
-                                        onPressed: () => pushRegister(context),
-                                        child: const Text('Daftar Di sini !!'),
-                                      ),
-                                      actions: <Widget>[
-                                        TextButton(
-                                          onPressed: () =>
-                                              Navigator.pop(context, 'Cancel'),
-                                          child: const Text('Cancel'),
-                                        ),
-                                        TextButton(
-                                          onPressed: () =>
-                                              Navigator.pop(context, 'OK'),
-                                          child: const Text('OK'),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                }
-                              }
                             },
                             style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all<Color>(
@@ -264,6 +207,73 @@ class _LoginViewState extends State<LoginView> {
         ),
       );
     });
+  }
+
+  Future<double> prosesLogin(String username, String password) async {
+    print('masuk gakk?? username : $username, pass $password');
+    User? logUser = await LoginClient.login(
+        username, password);
+    double result = 0;
+    print('User : logUser ${logUser}');
+    setUserData(logUser);
+
+
+
+    if (_formKey.currentState!.validate()) {
+      if (logUser != null) {
+        result = 1;
+        Fluttertoast.showToast(
+          msg: "Login Success",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.lightGreenAccent,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+        // LEMPAR  DATA USER YANG LOGIN KE HOME VIEW (kalau mau diubah disini)
+            builder: (_) => const HomeFix(),
+          ),
+        );
+      } else {
+        result = 0;
+        Fluttertoast.showToast(
+          msg: "Login Failed",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+
+        showDialog(
+          context: context,
+          builder: (_) => AlertDialog(
+            title: const Text('Password Salah'),
+            content: TextButton(
+              onPressed: () => pushRegister(context),
+              child: const Text('Daftar Di sini !!'),
+            ),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context, 'Cancel'),
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(context, 'OK'),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+      }
+    }
+    return result;
   }
 
   void pushRegister(BuildContext context) {
