@@ -27,6 +27,6 @@ Membuat aplikasi booking hotel sederhana yang berbasis di Android menggunakan ba
 - Michael Kevin Kimyuwono (210711056) : resizer, intl, memperbaiki pdf_view, preview screen
 - Bonaventura Dimas Dyan Bagaskara (210711088) : uuid, memperbaiki pemanggilan gambar dari pdf_view ke preview
 
-##Modul API
-- Iqbal : Login Register
+## Modul API
+- Iqbal : Login, Register
 - Tiffany : Tampil Profile, Update Profile, Forget Password, CRUD
