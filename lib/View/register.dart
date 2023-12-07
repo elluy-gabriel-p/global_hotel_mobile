@@ -49,32 +49,66 @@ class _RegisterViewState extends State<RegisterView> {
     super.initState();
   }
 
-  void _showAlertDialog(
-      String title, String message, Map<String, dynamic> FormData) {
-    showDialog(
+  Future<void> showAlertDialog(BuildContext context, String message) async {
+    return showDialog<void>(
       context: context,
+      barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(title),
+          title: Text('Confirmation'),
           content: Text(message),
-          backgroundColor: Colors.orange[100],
-          contentPadding: EdgeInsets.fromLTRB(25.0, 25.0, 25.0, 0.0),
           actions: <Widget>[
             TextButton(
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (_) => LoginView(data: FormData)));
+              child: Text('Confirm'),
+              onPressed: () async {
+                Navigator.of(context).pop();
+                // Continue with the user creation
+                User user = User(
+                    username: usernameController.text,
+                    email: emailController.text,
+                    password: passwordController.text,
+                    notelp: notelpController.text,
+                    borndate: dateinput.text);
+                print(user.username);
+                LoginClient.create(user);
+
+                Fluttertoast.showToast(
+                    msg: "Register Success",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.CENTER,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.lightGreenAccent,
+                    textColor: Colors.white,
+                    fontSize: 16.0);
+
+                if (widget.id == null) {
+                  await addUser();
+                }
+
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LoginView(),
+                  ),
+                );
               },
-              child: Text('OK'),
+            ),
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+
+                Fluttertoast.showToast(
+                    msg: "Register Failed",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.CENTER,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                    fontSize: 16.0);
+              },
             ),
           ],
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.horizontal(),
-            side: BorderSide(
-              color: Color.fromARGB(255, 249, 117, 1),
-              width: 1.0,
-            ),
-          ),
         );
       },
     );
@@ -100,10 +134,10 @@ class _RegisterViewState extends State<RegisterView> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     CircleAvatar(
-                      radius: 13,
+                      radius: 30,
                       backgroundImage: AssetImage('image/globalHotelLogo.png'),
                     ),
-                    SizedBox(height: 5),
+                    SizedBox(height: 10),
                     Container(
                       padding: EdgeInsets.all(16.0),
                       decoration: BoxDecoration(
@@ -212,161 +246,56 @@ class _RegisterViewState extends State<RegisterView> {
                           ),
 
                           SizedBox(height: 5),
-                          //select sex
-                          Padding(
-                            padding: const EdgeInsets.only(left: 5, top: 1),
-                            child: Row(
-                              children: [
-                                Text('Gender :'),
-                                Expanded(
-                                  child: RadioListTile(
-                                    title: Text('Pria'),
-                                    value: listGender.pria,
-                                    groupValue: gender,
-                                    onChanged: (val) {
-                                      setState(() {
-                                        gender = val;
-                                      });
-                                    },
-                                  ),
-                                ),
-                                Expanded(
-                                  child: RadioListTile(
-                                    title: Text('Wanita'),
-                                    value: listGender.wanita,
-                                    groupValue: gender,
-                                    onChanged: (val) {
-                                      setState(() {
-                                        gender = val;
-                                      });
-                                    },
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 10, top: 1),
-                            child: SizedBox(
-                              width: 350,
-                              child: TextFormField(
-                                controller: dateinput,
-                                decoration: InputDecoration(
-                                  labelText: "Date of Birth",
-                                  contentPadding: EdgeInsets.all(10.0),
-                                  filled: true,
-                                  icon: Icon(Icons.calendar_today),
-                                  enabledBorder: UnderlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                    borderSide: BorderSide.none,
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                    borderSide:
-                                        BorderSide(color: Colors.black45),
-                                  ),
-                                ),
-                                onTap: () async {
-                                  var date = await showDatePicker(
-                                      context: context,
-                                      initialDate: DateTime(2000),
-                                      firstDate: DateTime(1900),
-                                      lastDate: DateTime(2023));
 
-                                  if (date != null) {
-                                    print(date);
-                                    String formatDate =
-                                        DateFormat('dd/MM/yyyy').format(date);
-                                    print(formatDate);
-                                    setState(() {
-                                      dateinput.text = formatDate;
-                                    });
-                                  }
-                                },
-                                validator: (value) {
-                                  if (value == '') {
-                                    return "Tanggal Lahir Tidak Boleh Kosong";
-                                  }
-                                  if (value == '--/--/----') {
-                                    return "Format Tanggal Salah";
-                                  }
-                                  return null;
-                                },
-                              ),
+                          TextFormField(
+                            controller: dateinput,
+                            decoration: InputDecoration(
+                              labelText: "Date of Birth",
+                              prefixIcon: Icon(Icons.calendar_today),
                             ),
+                            onTap: () async {
+                              var date = await showDatePicker(
+                                  context: context,
+                                  initialDate: DateTime(2000),
+                                  firstDate: DateTime(1900),
+                                  lastDate: DateTime(2023));
+
+                              if (date != null) {
+                                print(date);
+                                String formatDate =
+                                    DateFormat('dd/MM/yyyy').format(date);
+                                print(formatDate);
+                                setState(() {
+                                  dateinput.text = formatDate;
+                                });
+                              }
+                            },
+                            validator: (value) {
+                              if (value == '') {
+                                return "Tanggal Lahir Tidak Boleh Kosong";
+                              }
+                              if (value == '--/--/----') {
+                                return "Format Tanggal Salah";
+                              }
+                              return null;
+                            },
                           ),
-                          //user agreement
-                          Padding(
-                            padding: const EdgeInsets.only(left: 20, top: 2),
-                            child: Column(
-                              children: [
-                                CheckboxListTile(
-                                  title: Text('Accept Agreement'),
-                                  value: agreement,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      agreement = value!;
-                                    });
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
+                          SizedBox(height: 20),
+
                           ElevatedButton(
                               onPressed: () async {
                                 if (_formKey.currentState!.validate()) {
-                                  if (agreement == true) {
-                                    bool registrationSuccessful = true;
-                                    Map<String, dynamic> FormData = {};
-                                    FormData['username'] =
-                                        usernameController.text;
-                                    FormData['password'] =
-                                        passwordController.text;
-                                    FormData['email'] = emailController.text;
-                                    FormData['notelp'] = notelpController.text;
-                                    FormData['borndate'] = dateinput.text;
+                                  Map<String, dynamic> FormData = {};
+                                  FormData['username'] =
+                                      usernameController.text;
+                                  FormData['password'] =
+                                      passwordController.text;
+                                  FormData['email'] = emailController.text;
+                                  FormData['notelp'] = notelpController.text;
+                                  FormData['borndate'] = dateinput.text;
 
-                                    User user= User(username: usernameController.text,email: emailController.text ,password: passwordController.text, notelp: notelpController.text, borndate: dateinput.text);
-                                    print(user.username);
-                                    LoginClient.create(user);
-
-                                    if (registrationSuccessful) {
-                                      _showAlertDialog('Success',
-                                          'Registrasi berhasil!', FormData);
-                                      Fluttertoast.showToast(
-                                          msg: "Register Success",
-                                          toastLength: Toast.LENGTH_SHORT,
-                                          gravity: ToastGravity.CENTER,
-                                          timeInSecForIosWeb: 1,
-                                          backgroundColor:
-                                              Colors.lightGreenAccent,
-                                          textColor: Colors.white,
-                                          fontSize: 16.0);
-
-                                      if (widget.id == null) {
-                                        await addUser();
-                                      }
-                                    }
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (_) => LoginView()));
-                                  } else {
-                                    Map<String, dynamic> FormData = {};
-                                    _showAlertDialog(
-                                        'Failed',
-                                        'Please check the user agreement',
-                                        FormData);
-                                  }
-                                } else {
-                                  Fluttertoast.showToast(
-                                      msg: "Register Failed",
-                                      toastLength: Toast.LENGTH_SHORT,
-                                      gravity: ToastGravity.CENTER,
-                                      timeInSecForIosWeb: 1,
-                                      backgroundColor: Colors.red,
-                                      textColor: Colors.white,
-                                      fontSize: 16.0);
+                                  showAlertDialog(context,
+                                      'Are you sure you want to create this user?');
                                 }
                               },
                               style: ButtonStyle(
