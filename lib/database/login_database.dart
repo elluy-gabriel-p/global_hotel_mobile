@@ -1,6 +1,7 @@
 import 'dart:ffi';
 
 import 'package:ugdlayout2/entity/user.dart';
+import 'package:ugdlayout2/entity/hotel.dart';
 
 import 'dart:convert';
 import 'package:http/http.dart';
@@ -110,6 +111,84 @@ class LoginClient {
       }
     } catch (e) {
       throw Exception('Error updating password: $e');
+    }
+  }
+}
+
+class HotelClient {
+  static final String url = '10.0.2.2:8000';
+  static final String endpoint = '/api/hotel/';
+
+  static Future<List<Hotel>> fetchAll() async {
+    try {
+      var response = await get(
+          Uri.http(url, endpoint)); // request ke api dan menyimpan responsenya
+
+      if (response.statusCode != 200) throw Exception(response.reasonPhrase);
+
+      //ambil data dari response body
+      Iterable list = json.decode(response.body)['data'];
+
+      //list map utk membuat list hotel berdasar tiap elemen dari list
+      return list.map((e) => Hotel.fromJson(e)).toList();
+    } catch (e) {
+      return Future.error(e.toString());
+    }
+  }
+
+  //ambil data dari API sesuai id
+  static Future<Hotel> find(id) async {
+    try {
+      var response = await get(Uri.http(url, '$endpoint/$id')); //req ke api
+
+      if (response.statusCode != 200) throw Exception(response.reasonPhrase);
+
+      //buat hotel berdasarkan data dari response body
+      return Hotel.fromJson(json.decode(response.body)['data']);
+    } catch (e) {
+      return Future.error(e.toString());
+    }
+  }
+
+  //membuat data baru
+  static Future<Response> create(Hotel hotel) async {
+    try {
+      var response = await post(Uri.http(url, endpoint),
+          headers: {"Content-Type": "application/json"},
+          body: hotel.toRawJson());
+      print(response.body);
+
+      if (response.statusCode != 200) throw Exception(response.reasonPhrase);
+
+      return response;
+    } catch (e) {
+      return Future.error(e.toString());
+    }
+  }
+
+  //mengubaah data sesuai id
+  static Future<Response> update(Hotel objek) async {
+    try {
+      var response = await put(Uri.http(url, '$endpoint/${objek.id}'),
+          headers: {'Content-Type': 'application/json'},
+          body: objek.toRawJson());
+
+      if (response.statusCode != 200) throw Exception(response.reasonPhrase);
+      return response;
+    } catch (e) {
+      return Future.error(e.toString());
+    }
+  }
+
+  //menghapus data sesuai id
+  static Future<Response> destroy(id) async {
+    try {
+      var response = await delete(Uri.http(url, '$endpoint/$id'));
+
+      if (response.statusCode != 200) throw Exception(response.reasonPhrase);
+      return response;
+    } catch (e) {
+      return Future.error(e.toString());
     }
   }
 }

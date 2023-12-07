@@ -7,6 +7,7 @@ import 'package:ugdlayout2/View/user/profile/profile.dart';
 import 'package:ugdlayout2/View/user/my_booking/on_going.dart';
 import 'package:ugdlayout2/View/ugdAPI2/kamarPage.dart';
 import 'package:ugdlayout2/View/home.dart';
+import 'package:ugdlayout2/View/Tubes/homeContent.dart';
 
 class HomeFix extends StatefulWidget {
   const HomeFix({super.key});
@@ -28,7 +29,7 @@ class _HomeViewState extends State<HomeFix> {
     KamarPage2(),
 
     //*index 2
-    OnGoing(),
+    HomeContent(),
 
     //*index 3
     ProfilePage(),
@@ -43,7 +44,7 @@ class _HomeViewState extends State<HomeFix> {
             icon: Icon(
               Icons.description,
             ),
-            label: 'Kamar',
+            label: 'Booking',
             backgroundColor: Colors.red,
           ),
           BottomNavigationBarItem(
