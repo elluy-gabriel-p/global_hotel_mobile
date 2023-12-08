@@ -1,15 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:ugdlayout2/View/ugdAPI2/kamarPage.dart';
-import 'package:ugdlayout2/View/view_list.dart';
-import 'package:ugdlayout2/View/view_grid.dart';
-import 'package:ugdlayout2/View/kamar_page.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:ugdlayout2/View/user/profile/profile.dart';
-import 'package:ugdlayout2/View/user/my_booking/on_going.dart';
-import 'package:ugdlayout2/View/ugdAPI2/kamarPage.dart';
-import 'package:ugdlayout2/View/home.dart';
-import 'package:ugdlayout2/View/Tubes/homeContent.dart';
-import 'package:ugdlayout2/View/Tubes/cancelBooking.dart';
 import 'package:ugdlayout2/View/Tubes/successBooking.dart';
+import 'package:ugdlayout2/View/Tubes/homeContent.dart';
 
 class HomeFix extends StatefulWidget {
   const HomeFix({super.key});
@@ -20,11 +13,6 @@ class HomeFix extends StatefulWidget {
 
 class _HomeViewState extends State<HomeFix> {
   int _selectedIndex = 1;
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
 
   static List<Widget> _widgedOptions = <Widget>[
     //*index 1
@@ -40,33 +28,47 @@ class _HomeViewState extends State<HomeFix> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.description,
-            ),
-            label: 'Booking',
-            backgroundColor: Colors.red,
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              blurRadius: 20,
+              color: Colors.black.withOpacity(.1),
+            )
+          ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
+          child: GNav(
+            gap: 8,
+            activeColor: Colors.white,
+            iconSize: 24,
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+            duration: Duration(milliseconds: 500),
+            tabBackgroundColor: Colors.grey.shade800,
+            tabs: [
+              GButton(
+                icon: Icons.description,
+                text: 'Booking',
+              ),
+              GButton(
+                icon: Icons.home,
+                text: 'Home',
+              ),
+              GButton(
+                icon: Icons.account_circle,
+                text: 'Profile',
+              ),
+            ],
+            selectedIndex: _selectedIndex,
+            onTabChange: (index) {
+              setState(() {
+                _selectedIndex = index;
+              });
+            },
           ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home,
-            ),
-            label: 'Home',
-            backgroundColor: Colors.purple,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.account_circle,
-            ),
-            label: 'Profile',
-            backgroundColor: Colors.pink,
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.black,
-        onTap: _onItemTapped,
+        ),
       ),
       body: _widgedOptions.elementAt(_selectedIndex),
     );

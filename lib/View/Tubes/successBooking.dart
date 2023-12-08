@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:ugdlayout2/View/Tubes/serviceView.dart';
 
 class SuccessBooking extends StatefulWidget {
   const SuccessBooking({Key? key}) : super(key: key);
@@ -204,66 +203,6 @@ class _SuccessBookingState extends State<SuccessBooking> {
                                     ),
                                   ],
                                 ),
-                              ),
-                              SizedBox(height: 10.0),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (_) => const ServiceView(),
-                                        ),
-                                      );
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                      primary: const Color.fromARGB(
-                                          255, 70, 87, 106),
-                                      onPrimary: Colors.white,
-                                      padding: EdgeInsets.symmetric(
-                                        vertical: 15.0,
-                                        horizontal: 30.0,
-                                      ),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(8.0),
-                                      ),
-                                    ),
-                                    child: Text(
-                                      'Service Hotel',
-                                      style: TextStyle(
-                                        fontSize: 15.0,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                  // SizedBox(width: 20),
-                                  // ElevatedButton(
-                                  //   onPressed: () {
-                                  //     // Handle second button press
-                                  //   },
-                                  //   style: ElevatedButton.styleFrom(
-                                  //     primary: Colors.green,
-                                  //     onPrimary: Colors.white,
-                                  //     padding: EdgeInsets.symmetric(
-                                  //       vertical: 15.0,
-                                  //       horizontal: 30.0,
-                                  //     ),
-                                  //     shape: RoundedRectangleBorder(
-                                  //       borderRadius: BorderRadius.circular(8.0),
-                                  //     ),
-                                  //   ),
-                                  //   child: Text(
-                                  //     'Button 2',
-                                  //     style: TextStyle(
-                                  //       fontSize: 15.0,
-                                  //       fontWeight: FontWeight.bold,
-                                  //     ),
-                                  //   ),
-                                  // ),
-                                ],
                               ),
                             ],
                           ),

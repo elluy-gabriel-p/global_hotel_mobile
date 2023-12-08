@@ -112,8 +112,6 @@ class LoginClient {
       throw Exception('Error updating password: $e');
     }
   }
-
-  
 }
 
 class HotelClient {
@@ -169,12 +167,16 @@ class HotelClient {
 
   //mengubaah data sesuai id
   static Future<Response> update(Hotel objek) async {
+    print(Uri.http(url, '$endpoint${objek.id}'));
     try {
-      var response = await put(Uri.http(url, '$endpoint/${objek.id}'),
-          headers: {'Content-Type': 'application/json'},
-          body: objek.toRawJson());
-
+      var response = await put(
+        Uri.http(url, '$endpoint${objek.id}'),
+        headers: {'Content-Type': 'application/json'},
+        body: objek.toRawJson(),
+      );
+      print(response.body);
       if (response.statusCode != 200) throw Exception(response.reasonPhrase);
+
       return response;
     } catch (e) {
       return Future.error(e.toString());
@@ -184,9 +186,10 @@ class HotelClient {
   //menghapus data sesuai id
   static Future<Response> destroy(id) async {
     try {
-      var response = await delete(Uri.http(url, '$endpoint/$id'));
-
+      var response = await delete(Uri.http(url, '/api/hotel/$id'));
+      print(response.body);
       if (response.statusCode != 200) throw Exception(response.reasonPhrase);
+
       return response;
     } catch (e) {
       return Future.error(e.toString());

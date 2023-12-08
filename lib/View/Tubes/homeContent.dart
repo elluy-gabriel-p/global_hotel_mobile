@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:ugdlayout2/View/Tubes/homeFix.dart';
 import 'package:ugdlayout2/View/inputHotel.dart';
 import 'package:ugdlayout2/entity/hotel.dart';
 import 'package:ugdlayout2/database/login_database.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ugdlayout2/entity/user.dart';
 
 class HomeContent extends StatefulWidget {
   const HomeContent({Key? key}) : super(key: key);
@@ -13,10 +16,12 @@ class HomeContent extends StatefulWidget {
 
 class _HomeContentState extends State<HomeContent> {
   final TextEditingController _searchController = TextEditingController();
+  final TextEditingController usernameController = TextEditingController();
   int _current = 0;
   final CarouselController _controller = CarouselController();
 
   late Future<List<Hotel>> popularHotels;
+  bool isAdmin = false;
 
   final List<String> imgList = [
     'image/iklan1.png',
@@ -24,15 +29,27 @@ class _HomeContentState extends State<HomeContent> {
     'image/iklan3.png'
   ];
 
+  Future<void> loadUserData() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      int userId = prefs.getInt('userId') ?? 0;
+
+      User res = await LoginClient.find(userId);
+
+      setState(() {
+        usernameController.text = res.username ?? '';
+        isAdmin = res.username?.toLowerCase() == 'admin';
+      });
+    } catch (e) {
+      print('Error loading user data : $e');
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    loadUserData();
     popularHotels = HotelClient.fetchAll();
-  }
-
-  void _performSearch() {
-    String searchTerm = _searchController.text;
-    print('Performing search for: $searchTerm');
   }
 
   @override
@@ -41,64 +58,35 @@ class _HomeContentState extends State<HomeContent> {
       appBar: AppBar(
         title: Text('Global Hotel', style: TextStyle(color: Colors.black)),
         backgroundColor: Color.fromARGB(217, 217, 217, 217),
+        automaticallyImplyLeading: false,
         actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      inputHotel(), 
-                ),
-              );
-            },
-            icon: Icon(Icons.add),
-          ),
+          if (isAdmin)
+            IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => InputHotel(),
+                  ),
+                );
+              },
+              icon: Icon(Icons.add),
+            ),
         ],
       ),
       body: ListView(
-      children: [
-      //     ClipPath(
-      //       clipper: BottomClipper(),
-      //       child: Container(
-      //         height: 150.0,
-      //         color: Colors.grey[700],
-      //         padding: EdgeInsets.all(8.0),
-      //         child: Row(
-      //           children: [
-      //             Expanded(
-      //               child: Container(
-      //                 height: 40.0,
-      //                 padding: EdgeInsets.symmetric(horizontal: 16.0),
-      //                 decoration: BoxDecoration(
-      //                   color: Colors.white,
-      //                   borderRadius: BorderRadius.circular(30.0),
-      //                 ),
-      //                 child: Row(
-      //                   children: [
-      //                     GestureDetector(
-      //                       onTap: _performSearch,
-      //                       child: Icon(Icons.search),
-      //                     ),
-      //                     SizedBox(width: 8.0),
-      //                     Expanded(
-      //                       child: TextField(
-      //                         controller: _searchController,
-      //                         decoration: InputDecoration(
-      //                           hintText: 'Search',
-      //                           border: InputBorder.none,
-      //                         ),
-      //                       ),
-      //                     ),
-      //                   ],
-      //                 ),
-      //               ),
-      //             ),
-      //           ],
-      //         ),
-      //       ),
-      //     ),
-          SizedBox(width: 20.0),
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 16.0, top: 30.0, bottom: 30.0),
+            child: Text(
+              'Hai, ${usernameController.text}',
+              style: TextStyle(
+                fontSize: 24.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          SizedBox(width: 50.0),
           SingleChildScrollView(
             child: Column(
               children: [
@@ -177,7 +165,7 @@ class _HomeContentState extends State<HomeContent> {
             padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
             alignment: Alignment.centerLeft,
             child: Text(
-              'Popular',
+              'Hotels',
               style: TextStyle(
                 fontSize: 24.0,
                 fontWeight: FontWeight.bold,
@@ -197,15 +185,11 @@ class _HomeContentState extends State<HomeContent> {
                 print('Data: ${snapshot.data}');
                 return Column(
                   children: snapshot.data!.map((hotel) {
-                    return HotelCard(hotel: hotel);
+                    return HotelCard(hotel: hotel, isAdmin: isAdmin);
                   }).toList(),
                 );
               }
             },
-          ),
-          Divider(
-            color: const Color.fromARGB(255, 53, 53, 53),
-            thickness: 1.0,
           ),
         ],
       ),
@@ -233,10 +217,12 @@ class BottomClipper extends CustomClipper<Path> {
 
 class HotelCard extends StatelessWidget {
   final Hotel hotel;
+  final bool isAdmin;
 
   const HotelCard({
     Key? key,
     required this.hotel,
+    required this.isAdmin,
   }) : super(key: key);
 
   @override
@@ -244,14 +230,17 @@ class HotelCard extends StatelessWidget {
     return Card(
       margin: EdgeInsets.all(8.0),
       child: InkWell(
-        // onTap: () {
-        //   Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //       builder: (context) => HotelDetailPage(hotel: hotel),
-        //     ),
-        //   );
-        // },
+        onTap: isAdmin
+            ? () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => InputHotel(
+                        hotel: hotel), // Pass the hotel data to InputHotel
+                  ),
+                );
+              }
+            : null,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -261,7 +250,7 @@ class HotelCard extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(8.0)),
                 image: DecorationImage(
-                  image: AssetImage('image/iklan1.png'),
+                  image: AssetImage('image/hotel.jpg'),
                   fit: BoxFit.fitHeight,
                   alignment: Alignment.center,
                 ),
@@ -274,12 +263,24 @@ class HotelCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      hotel.nama,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          hotel.nama,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          ),
+                        ),
+                        if (isAdmin)
+                          IconButton(
+                            icon: Icon(Icons.delete),
+                            onPressed: () {
+                              _onDelete(context);
+                            },
+                          ),
+                      ],
                     ),
                     SizedBox(height: 8),
                     Text(hotel.alamat),
@@ -306,6 +307,31 @@ class HotelCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _onDelete(BuildContext context) async {
+    try {
+      print("A");
+      await HotelClient.destroy(hotel.id!);
+      print("AA");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Delete Success'),
+          backgroundColor: Colors.green,
+        ),
+      );
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => HomeFix()),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 }
 
