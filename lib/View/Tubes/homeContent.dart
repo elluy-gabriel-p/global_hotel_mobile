@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:ugdlayout2/View/hotel/detail_hotel.dart';
 import 'package:ugdlayout2/View/inputHotel.dart';
 import 'package:ugdlayout2/entity/hotel.dart';
 import 'package:ugdlayout2/database/login_database.dart';
@@ -47,8 +48,7 @@ class _HomeContentState extends State<HomeContent> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) =>
-                      inputHotel(), 
+                  builder: (context) => inputHotel(),
                 ),
               );
             },
@@ -57,47 +57,47 @@ class _HomeContentState extends State<HomeContent> {
         ],
       ),
       body: ListView(
-      children: [
-      //     ClipPath(
-      //       clipper: BottomClipper(),
-      //       child: Container(
-      //         height: 150.0,
-      //         color: Colors.grey[700],
-      //         padding: EdgeInsets.all(8.0),
-      //         child: Row(
-      //           children: [
-      //             Expanded(
-      //               child: Container(
-      //                 height: 40.0,
-      //                 padding: EdgeInsets.symmetric(horizontal: 16.0),
-      //                 decoration: BoxDecoration(
-      //                   color: Colors.white,
-      //                   borderRadius: BorderRadius.circular(30.0),
-      //                 ),
-      //                 child: Row(
-      //                   children: [
-      //                     GestureDetector(
-      //                       onTap: _performSearch,
-      //                       child: Icon(Icons.search),
-      //                     ),
-      //                     SizedBox(width: 8.0),
-      //                     Expanded(
-      //                       child: TextField(
-      //                         controller: _searchController,
-      //                         decoration: InputDecoration(
-      //                           hintText: 'Search',
-      //                           border: InputBorder.none,
-      //                         ),
-      //                       ),
-      //                     ),
-      //                   ],
-      //                 ),
-      //               ),
-      //             ),
-      //           ],
-      //         ),
-      //       ),
-      //     ),
+        children: [
+          //     ClipPath(
+          //       clipper: BottomClipper(),
+          //       child: Container(
+          //         height: 150.0,
+          //         color: Colors.grey[700],
+          //         padding: EdgeInsets.all(8.0),
+          //         child: Row(
+          //           children: [
+          //             Expanded(
+          //               child: Container(
+          //                 height: 40.0,
+          //                 padding: EdgeInsets.symmetric(horizontal: 16.0),
+          //                 decoration: BoxDecoration(
+          //                   color: Colors.white,
+          //                   borderRadius: BorderRadius.circular(30.0),
+          //                 ),
+          //                 child: Row(
+          //                   children: [
+          //                     GestureDetector(
+          //                       onTap: _performSearch,
+          //                       child: Icon(Icons.search),
+          //                     ),
+          //                     SizedBox(width: 8.0),
+          //                     Expanded(
+          //                       child: TextField(
+          //                         controller: _searchController,
+          //                         decoration: InputDecoration(
+          //                           hintText: 'Search',
+          //                           border: InputBorder.none,
+          //                         ),
+          //                       ),
+          //                     ),
+          //                   ],
+          //                 ),
+          //               ),
+          //             ),
+          //           ],
+          //         ),
+          //       ),
+          //     ),
           SizedBox(width: 20.0),
           SingleChildScrollView(
             child: Column(
@@ -252,57 +252,64 @@ class HotelCard extends StatelessWidget {
         //     ),
         //   );
         // },
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: 100.0,
-              height: 100.0,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                image: DecorationImage(
-                  image: AssetImage('image/iklan1.png'),
-                  fit: BoxFit.fitHeight,
-                  alignment: Alignment.center,
+        child: GestureDetector(
+          onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => HotelDetPage(hotel: hotel),
+            ));
+          },
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: 100.0,
+                height: 100.0,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                  image: DecorationImage(
+                    image: AssetImage('image/iklan1.png'),
+                    fit: BoxFit.fitHeight,
+                    alignment: Alignment.center,
+                  ),
                 ),
               ),
-            ),
-            SizedBox(width: 20.0),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      hotel.nama,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
-                    ),
-                    SizedBox(height: 8),
-                    Text(hotel.alamat),
-                    SizedBox(height: 8),
-                    Row(
-                      children: [
-                        Text('RP. ${hotel.harga}/malam'),
-                        SizedBox(width: 8),
-                        Spacer(),
-                        Row(
-                          children: [
-                            Text('${hotel.rating}'),
-                            Icon(Icons.star,
-                                color: Color.fromARGB(255, 255, 236, 66)),
-                          ],
+              SizedBox(width: 20.0),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        hotel.nama,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
                         ),
-                      ],
-                    ),
-                  ],
+                      ),
+                      SizedBox(height: 8),
+                      Text(hotel.alamat),
+                      SizedBox(height: 8),
+                      Row(
+                        children: [
+                          Text('RP. ${hotel.harga}/malam'),
+                          SizedBox(width: 8),
+                          Spacer(),
+                          Row(
+                            children: [
+                              Text('${hotel.rating}'),
+                              Icon(Icons.star,
+                                  color: Color.fromARGB(255, 255, 236, 66)),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

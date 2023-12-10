@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:ugdlayout2/View/ugdAPI2/editKamar.dart';
 import 'package:ugdlayout2/View/ugdAPI2/inputKamar.dart';
 import 'package:ugdlayout2/database/kamar_Database.dart';
 import 'package:ugdlayout2/entity/kamar.dart';
@@ -49,16 +50,19 @@ class _KamarPage2State extends State<KamarPage2> {
   ListTile scrollViewItem(Kamar k, BuildContext context) => ListTile(
         title: Text(k.tipe),
         subtitle: Text(k.harga.toString()),
-        onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => inputKamar(id: k.id),
-          ),
-        ).then((value) {
-          setState(() {
-            _listBarangFuture = KamarClient.fetchAll();
+        onTap: () {
+          print(k.id);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => EditKamarPage(kamar: k),
+            ),
+          ).then((value) {
+            setState(() {
+              _listBarangFuture = KamarClient.fetchAll();
+            });
           });
-        }),
+        },
         trailing: IconButton(
           onPressed: () => onDelete(k.id, context),
           icon: const Icon(Icons.delete),

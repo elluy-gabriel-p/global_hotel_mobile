@@ -6,7 +6,7 @@ class User {
   final int? id;
 
   String? username, email, password, notelp, borndate;
-  Uint8List? dataImage;
+  String? dataImage;
 
   User(
       {this.id,
@@ -35,5 +35,6 @@ class User {
         email = temp['email'],
         password = temp['password'],
         notelp = temp['notelp'],
-        borndate = temp['borndate'];
+        borndate = temp['borndate'],
+        dataImage = temp['image'];
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:ugdlayout2/View/hotel/booking_list.dart';
 import 'package:ugdlayout2/View/ugdAPI2/kamarPage.dart';
+import 'package:ugdlayout2/View/user/profile/profile_landing_page.dart';
 import 'package:ugdlayout2/View/view_list.dart';
 import 'package:ugdlayout2/View/view_grid.dart';
 import 'package:ugdlayout2/View/kamar_page.dart';
@@ -26,13 +28,13 @@ class _HomeViewState extends State<HomeFix> {
 
   static List<Widget> _widgedOptions = <Widget>[
     //*index 1
-    KamarPage2(),
+    BookingListPage(),
 
     //*index 2
     HomeContent(),
 
     //*index 3
-    ProfilePage(),
+    ProfileLandingPage(),
   ];
 
   @override

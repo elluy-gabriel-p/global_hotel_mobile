@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:ugdlayout2/View/Tubes/homeFix.dart';
 import 'package:ugdlayout2/theme_model.dart';
-import 'package:ugdlayout2/View/login.dart';
+import 'package:ugdlayout2/View/auth/login.dart';
 import 'package:provider/provider.dart';
 import 'package:sensors/sensors.dart';
 import 'package:screen_brightness/screen_brightness.dart';
 import 'package:wakelock/wakelock.dart';
 import 'dart:async';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(MyApp());
@@ -35,10 +37,17 @@ class _MyBrightnessControlAppState extends State<MyBrightnessControlApp> {
   bool isUserActive = false;
   double currentBrightness = 1.0;
   Timer? inactivityTimer;
+  var id = 0;
+
+  Future<void> getUserId() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    id = prefs.getInt('userId') ?? 0;
+  }
 
   @override
   void initState() {
     super.initState();
+    getUserId();
 
     // Prevent the screen from turning off
     Wakelock.enable();
@@ -96,7 +105,7 @@ class _MyBrightnessControlAppState extends State<MyBrightnessControlApp> {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             theme: themeNotifier.isDark ? ThemeData.dark() : ThemeData.light(),
-            home: LoginView(),
+            home: id == 0 ? LoginView() : HomeFix(),
           );
         });
       },

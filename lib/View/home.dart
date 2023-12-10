@@ -36,7 +36,7 @@ class _HomeViewState extends State<HomeView> {
     ProfilePage(),
 
     //*index 4
-    OnGoing(),
+    // OnGoing(),
   ];
 
   @override

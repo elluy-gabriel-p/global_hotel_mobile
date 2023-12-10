@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:ugdlayout2/View/Tubes/homeFix.dart';
 import 'package:ugdlayout2/View/user/my_booking/history.dart';
 
 class Success extends StatefulWidget {
-  const Success({super.key});
+  const Success({super.key,  required this.id, required this.checkin, required this.checkout, required this.jumlahOrang, required this.durasi, required this.tipe});
+  final int id;
+  final String checkin;
+  final String checkout;
+  final int jumlahOrang;
+  final int durasi;
+  final String tipe;
 
   @override
   State<Success> createState() => _SuccessState();
@@ -98,7 +105,7 @@ class _SuccessState extends State<Success> {
                                 ],
                               ),
                               Text(
-                                '2 Nights',
+                                '${widget.durasi} Nights',
                                 style: TextStyle(
                                   fontSize: 18.0,
                                   fontWeight: FontWeight.bold,
@@ -108,7 +115,7 @@ class _SuccessState extends State<Success> {
                                 height: 16.0,
                               ),
                               Text(
-                                'Tanggal Check In',
+                                'Tanggal Check In: ${widget.checkin}',
                                 style: TextStyle(
                                   fontSize: 18.0,
                                   fontWeight: FontWeight.bold,
@@ -118,7 +125,7 @@ class _SuccessState extends State<Success> {
                                 height: 16.0,
                               ),
                               Text(
-                                'Tanggal Check Out',
+                                'Tanggal Check Out: ${widget.checkout}',
                                 style: TextStyle(
                                   fontSize: 18.0,
                                   fontWeight: FontWeight.bold,
@@ -128,7 +135,7 @@ class _SuccessState extends State<Success> {
                                 height: 16.0,
                               ),
                               Text(
-                                '2 person',
+                                ': ${widget.jumlahOrang} person',
                                 style: TextStyle(
                                   fontSize: 18.0,
                                   fontWeight: FontWeight.bold,
@@ -138,7 +145,7 @@ class _SuccessState extends State<Success> {
                                 height: 16.0,
                               ),
                               Text(
-                                'Booking Id',
+                                'Booking Id: ${widget.id}',
                                 style: TextStyle(
                                   fontSize: 18.0,
                                   fontWeight: FontWeight.bold,
@@ -148,7 +155,7 @@ class _SuccessState extends State<Success> {
                                 height: 16.0,
                               ),
                               Text(
-                                'Luxury Hotel',
+                                '${widget.tipe}',
                                 style: TextStyle(
                                   fontSize: 18.0,
                                   fontWeight: FontWeight.bold,
@@ -172,7 +179,7 @@ class _SuccessState extends State<Success> {
                 child: ElevatedButton(
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => History(),
+                      builder: (context) => HomeFix(),
                     ));
                   },
                   style: ElevatedButton.styleFrom(

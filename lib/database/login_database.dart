@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:ugdlayout2/entity/user.dart';
 import 'package:ugdlayout2/entity/hotel.dart';
 
@@ -116,13 +114,15 @@ class LoginClient {
 }
 
 class HotelClient {
-  static final String url = '10.0.2.2:8000';
+  static final String url = 'https://projecthotel.my.id';
+  // static final String url = '10.0.2.2:8000';
+
   static final String endpoint = '/api/hotel/';
 
   static Future<List<Hotel>> fetchAll() async {
     try {
-      var response = await get(
-          Uri.http(url, endpoint)); // request ke api dan menyimpan responsenya
+      var response = await get(Uri.parse(
+          '$url/api/hotel')); // request ke api dan menyimpan responsenya
 
       if (response.statusCode != 200) throw Exception(response.reasonPhrase);
 

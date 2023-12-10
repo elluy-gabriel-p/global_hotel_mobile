@@ -4,11 +4,11 @@ import 'package:ugdlayout2/database/login_database.dart';
 import 'package:ugdlayout2/entity/user.dart';
 import 'package:ugdlayout2/View/home.dart';
 import 'package:ugdlayout2/View/Tubes/homeFix.dart';
-import 'package:ugdlayout2/View/register.dart';
+import 'package:ugdlayout2/View/auth/register.dart';
 import 'package:ugdlayout2/theme_model.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ugdlayout2/View/login.dart';
+import 'package:ugdlayout2/View/auth/login.dart';
 
 class ForgotPassView extends StatefulWidget {
   final Map? data;
