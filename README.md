@@ -37,3 +37,10 @@ Membuat aplikasi booking hotel sederhana yang berbasis di Android menggunakan ba
 - Michael (210711056) : Register testing, Login testing
 - Bona (210711088) : Login Testing
 - Elluy (210711306) : CRUD Testing
+
+## TUBES
+- Iqbal (210711485) : Kamar&Crud, List Hotel, Detail Hotel
+- Tiffany (210711483) : Hotel Crud, Kamar Crud, Login, Register, API
+- Elluy (210711306 : Register, API, Register final , Booking, Deploy App, Camera, Profile
+- Bonaventura (210711088) : 
+- Michael Kevin (210711056) : Login, Register, API, PDF View, PDF print
