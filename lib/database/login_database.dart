@@ -1,6 +1,5 @@
 import 'package:ugdlayout2/entity/user.dart';
 import 'package:ugdlayout2/entity/hotel.dart';
-import 'package:ugdlayout2/entity/service.dart';
 
 import 'dart:convert';
 import 'package:http/http.dart';
@@ -112,8 +111,6 @@ class LoginClient {
       throw Exception('Error updating password: $e');
     }
   }
-
-  
 }
 
 class HotelClient {
