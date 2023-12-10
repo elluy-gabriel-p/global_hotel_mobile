@@ -10,6 +10,8 @@ import 'package:ugdlayout2/View/user/my_booking/on_going.dart';
 import 'package:ugdlayout2/View/ugdAPI2/kamarPage.dart';
 import 'package:ugdlayout2/View/home.dart';
 import 'package:ugdlayout2/View/Tubes/homeContent.dart';
+import 'package:ugdlayout2/View/Tubes/cancelBooking.dart';
+import 'package:ugdlayout2/View/Tubes/successBooking.dart';
 
 class HomeFix extends StatefulWidget {
   const HomeFix({super.key});
@@ -28,7 +30,7 @@ class _HomeViewState extends State<HomeFix> {
 
   static List<Widget> _widgedOptions = <Widget>[
     //*index 1
-    BookingListPage(),
+    SuccessBooking(),
 
     //*index 2
     HomeContent(),
