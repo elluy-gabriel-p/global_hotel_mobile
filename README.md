@@ -1,4 +1,4 @@
-# TUBES PBP - HOTEL
+![image](https://github.com/tipiwww17/ugd2_layout_pbp/assets/132660085/d2c75f26-97c8-4cd7-956a-98133f2b3ba0)# TUBES PBP - HOTEL
 ## Anggota Kelompok/Kontributor Kelompok 7 PBP B
 1. Michael Kevin Kimyuwono (210711056)
 2. Bonaventura Dimas Dyan Bagaskara (210711088) 
@@ -42,5 +42,5 @@ Membuat aplikasi booking hotel sederhana yang berbasis di Android menggunakan ba
 - Iqbal (210711485) : Kamar&Crud, List Hotel, Detail Hotel
 - Tiffany (210711483) : Hotel Crud, Kamar Crud, Login, Register, API
 - Elluy (210711306 : Register, API, Register final , Booking, Deploy App, Camera, Profile
-- Bonaventura (210711088) : 
+- Bonaventura (210711088) : Profile, Review, CRUD review, Hosting
 - Michael Kevin (210711056) : Login, Register, API, PDF View, PDF print
